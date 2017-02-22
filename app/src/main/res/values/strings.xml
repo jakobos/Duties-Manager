@@ -13,12 +13,14 @@
 
 
     <!-- Navigation Drawer menu labels -->
+    <string name="nav_home">Home</string>
     <string name="nav_my_tasks">Moje zadania</string>
     <string name="nav_free_tasks">Wolne zadania</string>
 
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
+        <item>Home</item>
         <item>Moje zadania</item>
         <item>Wolne zadania</item>
     </string-array>
