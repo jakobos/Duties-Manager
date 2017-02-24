@@ -14,7 +14,7 @@ public abstract class DBEntityBase implements BaseColumns {
     protected static String TEXT_TYPE = " TEXT";
     protected static String INTEGER_TYPE = " INTEGER";
     protected static String FLOAT_TYPE = " REAL";
-    protected static String PIMARY_KEY = " PRIMARY KEY";
+    protected static String PRIMARY_KEY = " PRIMARY KEY";
     protected static String COMMA = ", ";
 
 
