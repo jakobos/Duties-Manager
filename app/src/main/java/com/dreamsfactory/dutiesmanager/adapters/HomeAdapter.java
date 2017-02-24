@@ -18,6 +18,14 @@ import java.util.List;
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
 
     private List<Task> tasksList;
+    private Listener listener;
+
+    public static interface Listener{
+        public void onClick(int position);
+    }
+    public void setListener(Listener listener){
+        this.listener = listener;
+    }
 
     public HomeAdapter(List<Task> tasksList){
         this.tasksList = tasksList;
@@ -30,9 +38,21 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         Task task = tasksList.get(position);
-        holder.name.setText(task.getTitle());
+        View view = holder.view;
+        TextView nameText = (TextView) view.findViewById(R.id.homeName);
+        nameText.setText(task.getTitle());
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener != null){
+                    listener.onClick(position);
+                }
+            }
+        });
+        //holder.name.setText(task.getTitle());
     }
 
     @Override
@@ -41,10 +61,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        public TextView name; //and more
+        public View view; //and more
         public MyViewHolder(View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.homeName);
+            //name = (TextView) itemView.findViewById(R.id.homeName);
         }
     }
 }
