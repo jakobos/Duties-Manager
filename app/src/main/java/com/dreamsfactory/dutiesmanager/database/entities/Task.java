@@ -34,6 +34,14 @@ public class Task extends DBEntityBase {
     //
     //constructors
     //
+    public Task(String title){
+        this.title = title;
+        this.description = "";
+        this.deadline = 0;
+        this.isDone = false;
+        this.ownerId = 0;
+        this.taskId = 0;
+    }
 
     //
     //Static methods
