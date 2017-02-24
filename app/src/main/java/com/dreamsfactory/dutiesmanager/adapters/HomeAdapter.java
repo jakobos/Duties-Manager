@@ -41,7 +41,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         Task task = tasksList.get(position);
         View view = holder.view;
-        TextView nameText = (TextView) view.findViewById(R.id.homeName);
+        TextView nameText = (TextView) view.findViewById(R.id.homeTitle);
         nameText.setText(task.getTitle());
 
         view.setOnClickListener(new View.OnClickListener() {
