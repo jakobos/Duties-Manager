@@ -60,10 +60,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         return tasksList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
-        public View view; //and more
+    public static class MyViewHolder extends RecyclerView.ViewHolder{
+        private View view; //and more
         public MyViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
             //name = (TextView) itemView.findViewById(R.id.homeName);
         }
     }
