@@ -13,6 +13,7 @@ public class Task extends DBEntityBase {
     //Constant variables
     //
     public static final String TABLE_NAME = "Task";
+    public static final String COLUMN_NAME_TASK_ID = "TaskId";
     public static final String COLUMN_NAME_TITLE = "Title";
     public static final String COLUMN_NAME_DESCRIPTION = "Description";
     public static final String COLUMN_NAME_DEADLINE = "Deadline";
@@ -28,7 +29,7 @@ public class Task extends DBEntityBase {
     private long deadline;
     private boolean isDone;
     private long ownerId;
-
+    private long taskId;
 
     //
     //constructors
@@ -41,6 +42,7 @@ public class Task extends DBEntityBase {
     public static String getCreateEntries(){
         return "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
+                COLUMN_NAME_TASK_ID + INTEGER_TYPE + COMMA +
                 COLUMN_NAME_TITLE + TEXT_TYPE + COMMA +
                 COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA +
                 COLUMN_NAME_DEADLINE + INTEGER_TYPE + COMMA +
@@ -52,6 +54,7 @@ public class Task extends DBEntityBase {
     public static String[] getFullProjection(){
         String[] projection = {
                 _ID,
+                COLUMN_NAME_TASK_ID,
                 COLUMN_NAME_TITLE,
                 COLUMN_NAME_DESCRIPTION,
                 COLUMN_NAME_DEADLINE,
@@ -65,6 +68,7 @@ public class Task extends DBEntityBase {
     @Override
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME_TASK_ID, taskId);
         values.put(COLUMN_NAME_TITLE, title);
         values.put(COLUMN_NAME_DESCRIPTION, description);
         values.put(COLUMN_NAME_DEADLINE, deadline);
@@ -77,6 +81,7 @@ public class Task extends DBEntityBase {
     public boolean readFromCursor(Cursor cursor) {
         try{
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
+            this.taskId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_TASK_ID));
             this.title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_TITLE));
             this.description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DESCRIPTION));
             this.deadline = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_DEADLINE));
@@ -103,6 +108,12 @@ public class Task extends DBEntityBase {
     //base class methods
     //
 
+    public long getTaskId(){
+        return taskId;
+    }
+    public void setTaskId(long taskId){
+        this.taskId = taskId;
+    }
     public String getTitle(){
         return title;
     }
