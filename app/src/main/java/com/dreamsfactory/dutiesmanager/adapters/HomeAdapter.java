@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.dreamsfactory.dutiesmanager.R;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -42,7 +44,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         Task task = tasksList.get(position);
         View view = holder.view;
         TextView nameText = (TextView) view.findViewById(R.id.homeTitle);
+        TextView ownerText = (TextView) view.findViewById(R.id.homeOwner);
+        TextView deadlineText = (TextView) view.findViewById(R.id.homeDeadline);
+
         nameText.setText(task.getTitle());
+        ownerText.setText(String.valueOf(task.getOwnerId()));
+        deadlineText.setText(String.valueOf(task.getDeadline()));
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

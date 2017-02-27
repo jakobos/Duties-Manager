@@ -42,6 +42,14 @@ public class Task extends DBEntityBase {
         this.ownerId = 0;
         this.taskId = 0;
     }
+    public Task(String title, long deadline, long ownerId){
+        this.title = title;
+        this.description = "";
+        this.deadline = deadline;
+        this.isDone = false;
+        this.ownerId = ownerId;
+        this.taskId = 0;
+    }
 
     //
     //Static methods
@@ -145,5 +153,11 @@ public class Task extends DBEntityBase {
     }
     public void setIsDone(Boolean isDone){
         this.isDone = isDone;
+    }
+    public long getOwnerId(){
+        return ownerId;
+    }
+    public void setOwnerId(long ownerId){
+        this.ownerId = ownerId;
     }
 }

@@ -72,12 +72,12 @@ public class HomeFragment extends Fragment {
         if(tasks == null){
             tasks = new ArrayList<>();
         }
-        tasks.add(new Task("Zadanie nr 1"));
-        tasks.add(new Task("Zadanie nr 2"));
-        tasks.add(new Task("Zadanie nr 3"));
-        tasks.add(new Task("Zadanie nr 4"));
-        tasks.add(new Task("Zadanie nr 5"));
-        tasks.add(new Task("Zadanie nr 6"));
+        tasks.add(new Task("Zadanie nr 1", 10, 4));
+        tasks.add(new Task("Zadanie nr 2", 11, 5));
+        tasks.add(new Task("Zadanie nr 3", 542, 3));
+        tasks.add(new Task("Zadanie nr 4", 12, 4));
+        tasks.add(new Task("Zadanie nr 5", 65, 3));
+        tasks.add(new Task("Zadanie nr 6", 32,112));
 
     }
 
