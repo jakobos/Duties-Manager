@@ -3,6 +3,9 @@ package com.dreamsfactory.dutiesmanager.database.entities;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by Kuba on 2017-02-24.
  */
@@ -160,4 +163,52 @@ public class Task extends DBEntityBase {
     public void setOwnerId(long ownerId){
         this.ownerId = ownerId;
     }
+
+    //
+    //special methods
+
+    /**
+     * Check if task is free
+     * @return
+     */
+    public boolean isFree(){
+        if(ownerId > 0)
+            return false;
+        else
+            return true;
+    }
+
+    /**
+     * Shows text how much time is to deadline
+     * @return
+     */
+    public String getCountdown(){
+        long currentMs = (Calendar.getInstance().getTime()).getTime();
+        long time = deadline - currentMs;
+        //in seconds
+        int seconds = (int) time/1000;
+
+        int minutes = (seconds%3600)/60;
+        int hours = seconds / 3600;
+        int days = hours/24;
+
+        String text;
+        if(days>0){
+            if(days==1){
+                text=""+days+" dzień";
+            }else{
+                text=""+days+" dni";
+            }
+        }else if(hours>0){
+            text = ""+hours+" godz.";
+        }else if(minutes>0){
+            text = ""+minutes+"min.";
+        }else{
+            text = "0 min.";
+        }
+
+
+        return text;
+    }
+
 }
