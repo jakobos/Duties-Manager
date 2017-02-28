@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.dreamsfactory.dutiesmanager.R;
 import com.dreamsfactory.dutiesmanager.adapters.HomeAdapter;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
+import com.dreamsfactory.dutiesmanager.util.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class HomeFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter);
         return view;
     }
