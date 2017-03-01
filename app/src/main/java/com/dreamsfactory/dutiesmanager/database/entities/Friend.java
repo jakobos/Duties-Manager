@@ -26,7 +26,11 @@ public class Friend extends DBEntityBase{
     /**
      * Constructors
      */
-
+    public Friend(){
+        userId = 0;
+        friendName = "";
+        friendEmail = "";
+    }
 
     /**
      * Static methods
