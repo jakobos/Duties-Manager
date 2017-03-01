@@ -27,4 +27,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="remain_time">Pozostało</string>
+    <string name="task_owner">Odpowiedzialny:</string>
+    <string name="task_description">Opis zadania:</string>
+    <string name="title_activity_new_task">NewTaskActivity</string>
+    <string name="new_task_title">Dodaj nowe zadanie</string>
+    <string name="new_task_title_hint">Wpisz nazwę zadania</string>
+    <string name="new_task_descr_hint">Opisz zadanie</string>
+    <string name="btn_deadline">Ustaw deadline</string>
 </resources>
