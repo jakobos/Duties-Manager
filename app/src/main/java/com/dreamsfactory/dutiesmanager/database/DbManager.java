@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import com.dreamsfactory.dutiesmanager.database.services.DbServiceBase;
+import com.dreamsfactory.dutiesmanager.database.services.FlatService;
 import com.dreamsfactory.dutiesmanager.database.services.FriendService;
 import com.dreamsfactory.dutiesmanager.database.services.TaskService;
+import com.dreamsfactory.dutiesmanager.database.services.UserService;
 
 /**
  * Created by Kuba on 2017-03-01.
@@ -22,6 +24,8 @@ public class DbManager {
     //all services entities
     private TaskService taskService;
     private FriendService friendService;
+    private UserService userService;
+    private FlatService flatService;
 
     //singleton
     private DbManager(Context context){
@@ -44,6 +48,12 @@ public class DbManager {
     public FriendService getFriendService(){
         return friendService;
     }
+    public UserService getUserService(){
+        return userService;
+    }
+    public FlatService getFlatService(){
+        return flatService;
+    }
 
     private void init(){
         if(initialized){
@@ -52,6 +62,8 @@ public class DbManager {
 
             taskService = new TaskService();
             friendService = new FriendService();
+            userService = new UserService();
+            flatService = new FlatService();
 
             initialized = true;
         }
