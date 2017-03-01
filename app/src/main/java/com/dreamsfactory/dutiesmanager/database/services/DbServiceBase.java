@@ -78,6 +78,25 @@ public class DbServiceBase {
         String[] whereValues = {interestValue};
         return executeQueryWhere(tableName, columns, whereColumns, whereValues);
     }
+    protected int executeQueryDelete(String tableName, ArrayList<String> whereColumns, String[] whereArgs){
+        String whereStatement = "";
+        for(int i =0; i < whereColumns.size(); i++){
+            String column = whereColumns.get(i);
+            whereStatement += column + " = ? ";
+            if(i+1 < whereColumns.size())
+                column += "AND ";
+        }
+        return dbRead().delete(tableName, whereStatement, whereArgs);
+    }
+    protected int executeQueryDelete(String tableName, String interestColumn, String interestValue){
+        ArrayList<String> whereColumns = new ArrayList<>();
+        whereColumns.add(interestColumn);
+        String[] whereValues = {interestValue};
+        return executeQueryDelete(tableName, whereColumns, whereValues);
+    }
+    protected int executeQueryDelete(String tableName){
+        return dbRead().delete(tableName, null, null);
+    }
 
     private SQLiteDatabase dbRead(){
         return dbClient.getReadableDatabase();
