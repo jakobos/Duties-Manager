@@ -30,6 +30,11 @@ public class User extends DBEntityBase {
     //
     //constructors
     //
+    public User(){
+        this.userId = 0;
+        this.name = "";
+        this.email = "";
+    }
 
     //
     //Static methods

@@ -27,9 +27,9 @@ public class Friend extends DBEntityBase{
      * Constructors
      */
     public Friend(){
-        userId = 0;
-        friendName = "";
-        friendEmail = "";
+        this.userId = 0;
+        this.friendName = "";
+        this.friendEmail = "";
     }
 
     /**
