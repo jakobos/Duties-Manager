@@ -1,5 +1,6 @@
 package com.dreamsfactory.dutiesmanager.activities;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -94,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, NewTaskActivity.class);
+                startActivity(intent);
             }
         });
     }
