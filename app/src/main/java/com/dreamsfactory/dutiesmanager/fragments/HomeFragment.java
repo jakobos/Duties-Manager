@@ -1,6 +1,7 @@
 package com.dreamsfactory.dutiesmanager.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamsfactory.dutiesmanager.R;
+import com.dreamsfactory.dutiesmanager.activities.FriendTaskActivity;
 import com.dreamsfactory.dutiesmanager.adapters.HomeAdapter;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
 import com.dreamsfactory.dutiesmanager.util.DividerItemDecoration;
@@ -59,6 +61,11 @@ public class HomeFragment extends Fragment {
         adapter.setListener(new HomeAdapter.Listener() {
             @Override
             public void onClick(int position) {
+
+                Intent intent = new Intent(getActivity(), FriendTaskActivity.class);
+                intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
+                startActivity(intent);
+
                 Toast.makeText(getActivity().getApplicationContext(), ""+position, Toast.LENGTH_LONG).show();
             }
         });
