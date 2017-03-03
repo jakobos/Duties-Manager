@@ -2,6 +2,8 @@ package com.dreamsfactory.dutiesmanager.database.entities;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -10,7 +12,7 @@ import java.util.Date;
  * Created by Kuba on 2017-02-24.
  */
 
-public class Task extends DBEntityBase {
+public class Task extends DBEntityBase implements Parcelable {
 
     //
     //Constant variables
@@ -219,5 +221,43 @@ public class Task extends DBEntityBase {
 
         return text;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /** save object in parcel */
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(title);
+        out.writeString(description);
+        out.writeLong(deadline);
+        out.writeByte((byte) (isDone ? 1 : 0));
+        out.writeLong(ownerId);
+        out.writeLong(taskId);
+    }
+
+    public static final Parcelable.Creator<Task> CREATOR
+            = new Parcelable.Creator<Task>() {
+        public Task createFromParcel(Parcel in) {
+            return new Task(in);
+        }
+
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
+
+    /** recreate object from parcel */
+    private Task(Parcel in) {
+        title = in.readString();
+        description = in.readString();
+        deadline = in.readLong();
+        isDone = in.readByte() != 0;
+        ownerId = in.readLong();
+        taskId = in.readLong();
+    }
+
 
 }
