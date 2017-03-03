@@ -13,8 +13,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.dreamsfactory.dutiesmanager.R;
+import com.dreamsfactory.dutiesmanager.database.entities.Task;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class NewTaskActivity extends AppCompatActivity {
 
@@ -27,6 +29,10 @@ public class NewTaskActivity extends AppCompatActivity {
     private EditText description;
     private Button deadlineBtn;
     private FloatingActionButton fab;
+
+    private long deadline;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,14 @@ public class NewTaskActivity extends AppCompatActivity {
         mDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY,23);
+                cal.set(Calendar.MINUTE,59);
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH,month);
+                cal.set(Calendar.DAY_OF_MONTH,dayOfMonth);
 
+                deadline = cal.getTimeInMillis();
             }
         };
 
@@ -65,6 +78,14 @@ public class NewTaskActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Task newTask = new Task();
+                newTask.setTitle(title.getText().toString());
+                newTask.setDescription(description.getText().toString());
+                newTask.setDeadline(deadline);
+
+
+
                 //save task and update server
             }
         });
