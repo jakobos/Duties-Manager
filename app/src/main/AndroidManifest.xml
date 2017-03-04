@@ -24,7 +24,9 @@
             android:name=".activities.NewTaskActivity"
             android:label="@string/title_activity_new_task"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.FriendTaskActivity"></activity>
+        <activity android:name=".activities.FriendTaskActivity" />
+        <activity android:name=".activities.MyTaskActivity" />
+        <activity android:name=".activities.FreeTaskActivity"></activity>
     </application>
 
 </manifest>
