@@ -35,4 +35,6 @@
     <string name="new_task_title_hint">Wpisz nazwę zadania</string>
     <string name="new_task_descr_hint">Opisz zadanie</string>
     <string name="btn_deadline">Ustaw deadline</string>
+    <string name="check_is_done">Zadanie zostało wykonane</string>
+    <string name="check_do_it">Wykonam to zadanie</string>
 </resources>
