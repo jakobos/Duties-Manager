@@ -44,7 +44,12 @@ public class TaskDetailsFragment extends Fragment {
         ownerText = (TextView) view.findViewById(R.id.taskOwnerText);
         ownerName = (TextView) view.findViewById(R.id.taskOwnerName);
         description = (TextView) view.findViewById(R.id.taskDescription);
+        ownerName.setVisibility(View.INVISIBLE);
+        ownerText.setVisibility(View.INVISIBLE);
 
+        if(savedInstanceState != null){
+            setTask((Task)savedInstanceState.getParcelable(KEY_TASK));
+        }
 
         return view;
     }
@@ -69,7 +74,7 @@ public class TaskDetailsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-       // outState.putParcelable(KEY_TASK, task);
+        outState.putParcelable(KEY_TASK, task);
     }
 
 
