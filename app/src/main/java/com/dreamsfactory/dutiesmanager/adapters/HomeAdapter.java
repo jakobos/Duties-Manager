@@ -49,7 +49,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
         nameText.setText(task.getTitle());
         ownerText.setText(String.valueOf(task.getOwnerId()));
-        deadlineText.setText(String.valueOf(task.getDeadline()));
+        deadlineText.setText(String.valueOf(task.getCountdown()));
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
