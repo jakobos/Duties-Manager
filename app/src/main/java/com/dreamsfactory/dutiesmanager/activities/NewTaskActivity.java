@@ -87,6 +87,7 @@ public class NewTaskActivity extends AppCompatActivity {
 
 
                 //save task and update server
+                finish();
             }
         });
     }
@@ -96,7 +97,7 @@ public class NewTaskActivity extends AppCompatActivity {
     @Override
     protected Dialog onCreateDialog(int id) {
         if(id == DATE_DIALOG_ID){
-            return new DatePickerDialog(getApplicationContext(), mDateListener, year, month, day);
+            return new DatePickerDialog(this, mDateListener, year, month, day);
         }
         return null;
     }
