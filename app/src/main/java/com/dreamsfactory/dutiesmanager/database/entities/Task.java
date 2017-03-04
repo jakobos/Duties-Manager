@@ -58,7 +58,7 @@ public class Task extends DBEntityBase implements Parcelable {
     }
     public Task(String title, long deadline, long ownerId){
         this.title = title;
-        this.description = "";
+        this.description = "Przykładowy opis zadania..";
         this.deadline = deadline;
         this.isDone = false;
         this.ownerId = ownerId;
