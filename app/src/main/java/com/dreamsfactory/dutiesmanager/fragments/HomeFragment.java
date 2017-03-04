@@ -14,12 +14,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamsfactory.dutiesmanager.R;
+import com.dreamsfactory.dutiesmanager.activities.FreeTaskActivity;
 import com.dreamsfactory.dutiesmanager.activities.FriendTaskActivity;
+import com.dreamsfactory.dutiesmanager.activities.MyTaskActivity;
 import com.dreamsfactory.dutiesmanager.adapters.HomeAdapter;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
 import com.dreamsfactory.dutiesmanager.util.DividerItemDecoration;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -62,9 +65,20 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(int position) {
 
-                Intent intent = new Intent(getActivity(), FriendTaskActivity.class);
-                intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
-                startActivity(intent);
+                if(tasks.get(position).getOwnerId() <= 0){
+                    Intent intent = new Intent(getActivity(), FreeTaskActivity.class);
+                    intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
+                    startActivity(intent);
+                }else if(tasks.get(position).getOwnerId() > 0 && tasks.get(position).getOwnerId() == 3){
+                    Intent intent = new Intent(getActivity(), MyTaskActivity.class);
+                    intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
+                    startActivity(intent);
+                }else if(tasks.get(position).getOwnerId() != 3){
+                    Intent intent = new Intent(getActivity(), FriendTaskActivity.class);
+                    intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
+                    startActivity(intent);
+                }
+
 
                 Toast.makeText(getActivity().getApplicationContext(), ""+position, Toast.LENGTH_LONG).show();
             }
@@ -81,13 +95,17 @@ public class HomeFragment extends Fragment {
         if(tasks == null){
             tasks = new ArrayList<>();
         }
-        tasks.add(new Task("Zadanie nr 1", 10, 4));
-        tasks.add(new Task("Zadanie nr 2", 11, 5));
-        tasks.add(new Task("Zadanie nr 3", 542, 3));
-        tasks.add(new Task("Zadanie nr 4", 12, 4));
-        tasks.add(new Task("Zadanie nr 5", 65, 3));
-        tasks.add(new Task("Zadanie nr 6", 32,112));
+        tasks.add(new Task("Zadanie nr 1", getDeadline(3), 0));
+        tasks.add(new Task("Zadanie nr 2", getDeadline(2), 5));
+        tasks.add(new Task("Zadanie nr 3", getDeadline(10), 3));
+        tasks.add(new Task("Zadanie nr 4", getDeadline(4), 4));
+        tasks.add(new Task("Zadanie nr 5", getDeadline(7), 3));
+        tasks.add(new Task("Zadanie nr 6", getDeadline(1),112));
 
+    }
+    private long getDeadline(int days){
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getTime().getTime() + days*24*60*60*1000;
     }
 
 }
