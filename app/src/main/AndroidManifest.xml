@@ -8,12 +8,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.UserLoginActivity" />
-        <activity android:name=".activities.FlatLoginActivity" />
+        <activity android:name=".activities.UserLoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.FlatLoginActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,9 +27,12 @@
             android:name=".activities.NewTaskActivity"
             android:label="@string/title_activity_new_task"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.FriendTaskActivity" />
-        <activity android:name=".activities.MyTaskActivity" />
-        <activity android:name=".activities.FreeTaskActivity"></activity>
+        <activity android:name=".activities.FriendTaskActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.MyTaskActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.FreeTaskActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
