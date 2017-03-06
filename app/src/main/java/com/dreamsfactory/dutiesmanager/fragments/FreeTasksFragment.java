@@ -42,8 +42,8 @@ public class FreeTasksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.freeRecyclerView);
+        View view = inflater.inflate(R.layout.fragment_free_tasks, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.freeTasksRecyclerView);
         generateTasksList();
         adapter = new FreeTaskAdapter(tasks);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
