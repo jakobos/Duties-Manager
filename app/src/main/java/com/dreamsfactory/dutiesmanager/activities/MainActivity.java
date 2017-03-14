@@ -2,6 +2,7 @@ package com.dreamsfactory.dutiesmanager.activities;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -25,6 +26,7 @@ import com.dreamsfactory.dutiesmanager.R;
 import com.dreamsfactory.dutiesmanager.fragments.FreeTasksFragment;
 import com.dreamsfactory.dutiesmanager.fragments.HomeFragment;
 import com.dreamsfactory.dutiesmanager.fragments.MyTasksFragment;
+import com.dreamsfactory.dutiesmanager.managers.LogManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean shouldLoadHomeFragOnBackPress = true;
 
     private Handler mHandler;
+
+    private static final String KEY_INDEX = "index";
 
 
     @Override
@@ -87,6 +91,22 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        LogManager.logInfo("onSaveInstanceState()");
+        outState.putInt(KEY_INDEX, navItemIndex);
+        LogManager.logInfo("onSaveInstanceState - navItemIndex = "+navItemIndex);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        navItemIndex = savedInstanceState.getInt(KEY_INDEX);
+        LogManager.logInfo("onRestoreInstanceState - navItemIndex = "+navItemIndex);
+        setToolbarTitle();
     }
 
     @Override
@@ -157,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void setToolbarTitle(){
         getSupportActionBar().setTitle(activity_titles[navItemIndex]);
+        LogManager.logInfo("setToolbarTitle - navItemIndex = "+ navItemIndex);
     }
     private void selectNavMenu(){
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
