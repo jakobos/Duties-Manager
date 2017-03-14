@@ -32,14 +32,14 @@ public class DbManager {
         this.mContext = context;
     }
 
-    private synchronized DbManager get(Context context){
+    private static synchronized DbManager get(Context context){
         if(_instance == null){
             _instance = new DbManager(context);
         }
         return _instance;
     }
 
-    public DbManager getInstance(Context context){
+    public static synchronized DbManager getInstance(Context context){
         return get(context.getApplicationContext());
     }
     public TaskService getTaskService(){
@@ -55,7 +55,7 @@ public class DbManager {
         return flatService;
     }
 
-    private void init(){
+    public void init(){
         if(initialized){
             dbClient = new DbHelper(mContext);
             DbServiceBase.init(dbClient);
