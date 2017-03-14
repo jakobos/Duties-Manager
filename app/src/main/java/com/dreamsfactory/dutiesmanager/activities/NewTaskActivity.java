@@ -14,9 +14,13 @@ import android.widget.EditText;
 
 import com.dreamsfactory.dutiesmanager.R;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
+import com.dreamsfactory.dutiesmanager.settings.Settings;
+import com.dreamsfactory.dutiesmanager.webServices.WebServiceManager;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NewTaskActivity extends AppCompatActivity {
 
@@ -46,6 +50,16 @@ public class NewTaskActivity extends AppCompatActivity {
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
+
+
+
+        title = (EditText) findViewById(R.id.newTaskTitleEditText);
+        description = (EditText) findViewById(R.id.newTaskDescriptionEditText);
+        deadlineBtn = (Button) findViewById(R.id.setDeadlineButton);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
         mDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -61,11 +75,12 @@ public class NewTaskActivity extends AppCompatActivity {
         };
 
 
-        title = (EditText) findViewById(R.id.newTaskTitleEditText);
-        description = (EditText) findViewById(R.id.newTaskDescriptionEditText);
-        deadlineBtn = (Button) findViewById(R.id.setDeadlineButton);
+    }
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+    @Override
+    protected void onStart() {
+        super.onStart();
+
 
 
         deadlineBtn.setOnClickListener(new View.OnClickListener() {
@@ -85,14 +100,26 @@ public class NewTaskActivity extends AppCompatActivity {
                 newTask.setDeadline(deadline);
 
 
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("title", newTask.getTitle());
+                params.put("description", newTask.getDescription());
+                params.put("deadline", String.valueOf(newTask.getDeadline()));
+                params.put("flat_id", Settings.getInstance(getBaseContext()).get(Settings.FLAT_ID));
 
+                WebServiceManager.getInstance(getBaseContext()).createTask(params);
                 //save task and update server
                 finish();
             }
         });
+
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        deadlineBtn.setOnClickListener(null);
+        fab.setOnClickListener(null);
+    }
 
     @Override
     protected Dialog onCreateDialog(int id) {
