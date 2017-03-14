@@ -38,4 +38,6 @@
     <string name="check_is_done">Zadanie zostało wykonane</string>
     <string name="check_do_it">Wykonam to zadanie</string>
     <string name="text_see_details">Zobacz szczegóły</string>
+    <string name="pref_user_id">userId</string>
+    <string name="pref_flat_id">flatId</string>
 </resources>

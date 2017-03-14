@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.dreamsfactory.dutiesmanager.R;
+
 /**
  * Created by Kuba on 2017-03-10.
  */
 
 public class Settings extends SettingsBase{
     //constants
+    public final static int USER_ID = R.string.pref_user_id;
+    public final static int FLAT_ID = R.string.pref_flat_id;
 
 
 
