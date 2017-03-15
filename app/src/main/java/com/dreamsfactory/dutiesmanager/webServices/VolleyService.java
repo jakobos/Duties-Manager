@@ -50,14 +50,14 @@ public class VolleyService {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        onResponse(response);
+                        listener.onResponse(response);
         //                pDialog.hide();
                     }
                 }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                //VolleyLog.d(TAG, "Error: " + error.getMessage());
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
                 // hide the progress dialog
                // pDialog.hide();
             }
@@ -80,14 +80,14 @@ public class VolleyService {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        onResponse(response);
+                        listener.onResponse(response);
 //                        Log.d(TAG, response.toString());
 //                        pDialog.hide();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
 //                pDialog.hide();
             }
         });
@@ -110,7 +110,7 @@ public class VolleyService {
 
             @Override
             public void onResponse(String response) {
-                onResponse(response);
+                listener.onResponse(response);
  //               Log.d(TAG, response.toString());
 //                pDialog.hide();
 
@@ -119,7 +119,7 @@ public class VolleyService {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-//                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
 //                pDialog.hide();
             }
         });
@@ -138,13 +138,14 @@ public class VolleyService {
 //        pDialog.setMessage("Loading...");
 //        pDialog.show();
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 url, null,
                 new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        onResponse(response);
+                        LogManager.logInfo(response.toString());
+                        listener.onResponse(response);
 //                        Log.d(TAG, response.toString());
 //                        pDialog.hide();
                     }
