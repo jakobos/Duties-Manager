@@ -1,6 +1,7 @@
 package com.dreamsfactory.dutiesmanager.webServices;
 
 import android.content.Context;
+import android.nfc.tech.IsoDep;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ public class WebServiceManager {
     public final static String METHOD_GET_FRIENDS = "";
     public final static String METHOD_GET_TASKS = "";
 
-    public final static String METHOD_CREATE_TASK = "";
+    public final static String METHOD_CREATE_TASK = "http://192.168.8.101/duties_manager_api/create_task.php";
     public final static String METHOD_UPDATE_TASK = "";
 
     public final static String METHOD_REGISTER_USER = "";
@@ -36,6 +37,29 @@ public class WebServiceManager {
     public final static String METHOD_REGISTER_FLAT = "";
     public final static String METHOD_LOGIN_FLAT = "";
 
+    public final static String RESPONSE_ERROR = "error";
+    public final static String RESPONSE_ERROR_MSG = "error_msg";
+
+    public final static String RESPONSE_USER_ID = "uid";
+    public final static String RESPONSE_USER_NAME = "name";
+    public final static String RESPONSE_USER_EMAIL = "email";
+    public final static String RESPONSE_USER = "user";
+
+    public final static String RESPONSE_CREATED_AT = "created_at";
+    public final static String RESPONSE_UPDATED_AT = "updated_at";
+
+    public final static String RESPONSE_TASK = "task";
+    public final static String RESPONSE_TASKS = "tasks";
+    public final static String RESPONSE_TASK_ID = "tid";
+    public final static String RESPONSE_OWNER_ID = "oid";
+    public final static String RESPONSE_TASK_TITLE = "title";
+    public final static String RESPONSE_TASK_DESCRIPTION = "description";
+    public final static String RESPONSE_TASK_DEADLINE = "deadline";
+    public final static String RESPONSE_TASK_IS_DONE = "is_done";
+
+    public final static String RESPONSE_FLAT_ID = "fid";
+    public final static String RESPONSE_FLAT_ADDRESS = "address";
+    public final static String RESPONSE_FLAT = "flat";
 
 
 
@@ -98,26 +122,27 @@ public class WebServiceManager {
                 //hideDialog();
                 try{
 
-                    boolean error = response.getBoolean("error");
+                    boolean error = response.getBoolean(RESPONSE_ERROR);
 
                     if(!error){
 
                         JSONArray objects;
                         // images found
                         // Getting Array of images
-                        objects = response.getJSONArray("tasks");
+                        objects = response.getJSONArray(RESPONSE_TASKS);
 
                         //ArrayList<Task> tasksList = new ArrayList<>();
 
                         // looping through All Products
                         for (int i = 0; i < objects.length(); i++) {
                             JSONObject taskObj = objects.getJSONObject(i);
-                            String taskId = taskObj.getString("tid");
-                            String ownerId = taskObj.getString("oid");
-                            String title = taskObj.getString("title");
-                            String description = taskObj.getString("description");
-                            String deadline = taskObj.getString("deadline");
-                            String isDone = taskObj.getString("is_done");
+
+                            String taskId = taskObj.getString(RESPONSE_TASK_ID);
+                            String ownerId = taskObj.getString(RESPONSE_OWNER_ID);
+                            String title = taskObj.getString(RESPONSE_TASK_TITLE);
+                            String description = taskObj.getString(RESPONSE_TASK_DESCRIPTION);
+                            String deadline = taskObj.getString(RESPONSE_TASK_DEADLINE);
+                            String isDone = taskObj.getString(RESPONSE_TASK_IS_DONE);
 
                             Task task = new Task();
                             task.setTaskId(Long.valueOf(taskId));
@@ -135,7 +160,7 @@ public class WebServiceManager {
 
                     }else{
 
-                        String errorMsg = response.getString("error_msg");
+                        String errorMsg = response.getString(RESPONSE_ERROR_MSG);
                         LogManager.logError(errorMsg);
 
                     }
@@ -163,8 +188,71 @@ public class WebServiceManager {
 
     }
 
-    public void createTask(Map<String, String> params){
+    public void createTask(Map<String,String> params){
+        Log.d(TAG, "createTask()");
+        VolleyService volleyService = new VolleyService();
+        volleyService.setListener(new VolleyService.Listener() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, "Login Response: " + response.toString());
+                //hideDialog();
 
+
+
+            }
+
+            @Override
+            public void onResponse(JSONArray response) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Login Response: " + response);
+
+                try{
+                    JSONObject JSONresponse = new JSONObject(response);
+                    boolean error = JSONresponse.getBoolean("error");
+
+                    if(!error){
+
+                        JSONObject taskObj;
+
+                        taskObj = JSONresponse.getJSONObject(RESPONSE_TASK);
+
+                        String taskId = taskObj.getString(RESPONSE_TASK_ID);
+                        String ownerId = taskObj.getString(RESPONSE_OWNER_ID);
+                        String title = taskObj.getString(RESPONSE_TASK_TITLE);
+                        String description = taskObj.getString(RESPONSE_TASK_DESCRIPTION);
+                        String deadline = taskObj.getString(RESPONSE_TASK_DEADLINE);
+                        String isDone = taskObj.getString(RESPONSE_TASK_IS_DONE);
+
+                        Task task = new Task();
+                        task.setTaskId(Long.valueOf(taskId));
+                        task.setOwnerId(Long.valueOf(ownerId));
+                        task.setTitle(title);
+                        task.setDescription(description);
+                        task.setDeadline(Long.valueOf(deadline));
+                        task.setIsDone(Boolean.valueOf(isDone));
+
+                        //DbManager.getInstance(mContext).getTaskService().insertTask(task);
+
+
+
+                    }else{
+
+                        String errorMsg = JSONresponse.getString(RESPONSE_ERROR_MSG);
+                        LogManager.logError(errorMsg);
+
+                    }
+
+                }catch(JSONException ex){
+                    ex.printStackTrace();
+                }
+            }
+        });
+        //volleyService.makePOSTJSONObjectRequest("tag_create_task", METHOD_CREATE_TASK, params);
+        volleyService.makePOSTStringRequest("tag_create_task", METHOD_CREATE_TASK, params);
     }
 
 
