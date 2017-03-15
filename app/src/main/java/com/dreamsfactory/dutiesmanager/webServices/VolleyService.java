@@ -175,4 +175,42 @@ public class VolleyService {
 
     }
 
+    protected void makePOSTStringRequest(String tag, String url, final Map<String,String> params){
+        // Tag used to cancel the request
+        //String  tag_string_req = "string_req";
+
+        //String url = "http://api.androidhive.info/volley/string_response.html";
+
+//        ProgressDialog pDialog = new ProgressDialog(this);
+//        pDialog.setMessage("Loading...");
+//        pDialog.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                listener.onResponse(response);
+                //               Log.d(TAG, response.toString());
+//                pDialog.hide();
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+//                pDialog.hide();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return params;
+            }
+        };
+
+// Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag);
+    }
+
 }
