@@ -1,5 +1,6 @@
 package com.dreamsfactory.dutiesmanager.webServices;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -8,6 +9,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.dreamsfactory.dutiesmanager.app.AppController;
+import com.dreamsfactory.dutiesmanager.managers.LogManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,6 +23,7 @@ import java.util.Map;
 
 public class VolleyService {
 
+    private final static String TAG = "VolleyService";
     private Listener listener;
 
     public void setListener(Listener listener){
@@ -128,7 +131,7 @@ public class VolleyService {
         AppController.getInstance().addToRequestQueue(strReq, tag);
     }
 
-    protected void makePOSTJSONObjectRequest(String tag, String url, final Map<String, String> params){
+    protected void makePOSTJSONObjectRequest(String tag, String url, final Map<String,String> params){
         // Tag used to cancel the request
 //        String tag_json_obj = "json_obj_req";
 
@@ -153,7 +156,8 @@ public class VolleyService {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-//                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                LogManager.logError(error.getMessage());
 //                pDialog.hide();
             }
         }) {
@@ -161,9 +165,10 @@ public class VolleyService {
             @Override
             protected Map<String, String> getParams() {
 //                Map<String, String> params = new HashMap<String, String>();
-//                params.put("name", "Androidhive");
-//                params.put("email", "abc@androidhive.info");
-//                params.put("password", "password123");
+//                params.put("title", "aaaa");
+//                params.put("description", "bbbb");
+//                params.put("deadline", "1111");
+//                params.put("flat_id", "13");/*Settings.getInstance(getBaseContext()).get(Settings.FLAT_ID)*/
 
                 return params;
             }

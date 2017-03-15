@@ -18,6 +18,7 @@ import com.dreamsfactory.dutiesmanager.activities.FreeTaskActivity;
 import com.dreamsfactory.dutiesmanager.activities.FriendTaskActivity;
 import com.dreamsfactory.dutiesmanager.activities.MyTaskActivity;
 import com.dreamsfactory.dutiesmanager.adapters.HomeAdapter;
+import com.dreamsfactory.dutiesmanager.database.DbManager;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
 import com.dreamsfactory.dutiesmanager.util.DividerItemDecoration;
 
@@ -61,6 +62,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        //tasks = //DbManager.getInstance(getContext()).getTaskService().getAllTasks();
+
         adapter.setListener(new HomeAdapter.Listener() {
             @Override
             public void onClick(int position) {
