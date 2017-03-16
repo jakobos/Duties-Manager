@@ -34,7 +34,7 @@ public abstract class SettingsBase {
     }
     protected String getString(String key){
         SharedPreferences preferences = getSharedPreferences();
-        return preferences.getString(key, null);
+        return preferences.getString(key, "0");
     }
 
     protected void setString(String key, String value){
