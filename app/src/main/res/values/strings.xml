@@ -40,4 +40,6 @@
     <string name="text_see_details">Zobacz szczegóły</string>
     <string name="pref_user_id">userId</string>
     <string name="pref_flat_id">flatId</string>
+    <string name="pref_last_sync_task">last_sync_task</string>
+    <string name="pref_last_sync_friend">last_sync_friend</string>
 </resources>
