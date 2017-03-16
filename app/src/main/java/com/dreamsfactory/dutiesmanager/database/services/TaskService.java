@@ -72,8 +72,13 @@ public class TaskService extends DbServiceBase {
         }
         return tasks;
     }
-    public ArrayList<Task> getTasksByIsDone(){
-        Cursor cursor = executeQueryWhere(Task.TABLE_NAME, Task.getFullProjection(), Task.COLUMN_NAME_IS_DONE, String.valueOf(1));
+    public ArrayList<Task> getTasksByIsDone(boolean isDone){
+        int value=0;
+        if(isDone)
+            value = 1;
+        else
+            value = 0;
+        Cursor cursor = executeQueryWhere(Task.TABLE_NAME, Task.getFullProjection(), Task.COLUMN_NAME_IS_DONE, String.valueOf(value));
         if(cursor.getCount() == 0)
             return null;
 
