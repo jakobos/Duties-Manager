@@ -23,13 +23,13 @@ import java.util.Map;
 public class WebServiceManager {
 
 
-    public final static String METHOD_GET_COUNTS = "";
+    public final static String METHOD_GET_COUNTS = "http://192.168.8.101/duties_manager_api/get_counts.php";
 
     public final static String METHOD_GET_FRIENDS = "";
     public final static String METHOD_GET_TASKS = "";
 
     public final static String METHOD_CREATE_TASK = "http://192.168.8.101/duties_manager_api/create_task.php";
-    public final static String METHOD_UPDATE_TASK = "";
+    public final static String METHOD_UPDATE_TASK = "http://192.168.8.101/duties_manager_api/update_task.php";
 
     public final static String METHOD_REGISTER_USER = "";
     public final static String METHOD_LOGIN_USER = "";
@@ -61,6 +61,9 @@ public class WebServiceManager {
     public final static String RESPONSE_FLAT_ADDRESS = "address";
     public final static String RESPONSE_FLAT = "flat";
 
+    public final static String RESPONSE_LAST_SYNC_FRIEND = "last_sync_friend";
+    public final static String RESPONSE_LAST_SYNC_TASK = "last_sync_task";
+
 
 
     private static WebServiceManager _instance;
@@ -89,13 +92,13 @@ public class WebServiceManager {
 //        }
 //    }
 
-    public void getCount(){
+    public void getCount(Map<String, String> params){
 
         VolleyService volleyService = new VolleyService();
         volleyService.setListener(new VolleyService.Listener() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d(TAG, "Login Response: " + response.toString());
+
             }
 
             @Override
@@ -105,11 +108,11 @@ public class WebServiceManager {
 
             @Override
             public void onResponse(String response) {
-
+                Log.d(TAG, "Login Response: " + response);
             }
         });
 
-        volleyService.makePOSTJSONObjectRequest("get_count_tag", "url", null);
+        volleyService.makePOSTStringRequest("get_count_tag", METHOD_GET_COUNTS, params);
 
     }
 
@@ -235,7 +238,7 @@ public class WebServiceManager {
                         task.setDeadline(Long.valueOf(deadline));
                         task.setIsDone(Boolean.valueOf(isDone));
 
-                        //DbManager.getInstance(mContext).getTaskService().insertTask(task);
+                        DbManager.getInstance(mContext).getTaskService().insertTask(task);
 
 
 
@@ -253,6 +256,71 @@ public class WebServiceManager {
         });
         //volleyService.makePOSTJSONObjectRequest("tag_create_task", METHOD_CREATE_TASK, params);
         volleyService.makePOSTStringRequest("tag_create_task", METHOD_CREATE_TASK, params);
+    }
+
+    public void updateTask(Map<String, String> params){
+        Log.d(TAG, "updateTask()");
+        VolleyService volleyService = new VolleyService();
+        volleyService.setListener(new VolleyService.Listener() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+
+            @Override
+            public void onResponse(JSONArray response) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Login Response: " + response);
+
+                try{
+                    JSONObject JSONresponse = new JSONObject(response);
+                    boolean error = JSONresponse.getBoolean("error");
+
+                    if(!error){
+
+                        JSONObject taskObj;
+
+                        taskObj = JSONresponse.getJSONObject(RESPONSE_TASK);
+
+                        String taskId = taskObj.getString(RESPONSE_TASK_ID);
+                        String ownerId = taskObj.getString(RESPONSE_OWNER_ID);
+                        String title = taskObj.getString(RESPONSE_TASK_TITLE);
+                        String description = taskObj.getString(RESPONSE_TASK_DESCRIPTION);
+                        String deadline = taskObj.getString(RESPONSE_TASK_DEADLINE);
+                        String isDone = taskObj.getString(RESPONSE_TASK_IS_DONE);
+
+                        Task task = new Task();
+                        task.setTaskId(Long.valueOf(taskId));
+                        task.setOwnerId(Long.valueOf(ownerId));
+                        task.setTitle(title);
+                        task.setDescription(description);
+                        task.setDeadline(Long.valueOf(deadline));
+                        task.setIsDone(Boolean.valueOf(isDone));
+
+                        DbManager.getInstance(mContext).getTaskService().updateTask(task);
+
+
+
+                    }else{
+
+                        String errorMsg = JSONresponse.getString(RESPONSE_ERROR_MSG);
+                        LogManager.logError(errorMsg);
+
+                    }
+
+                }catch(JSONException ex){
+                    ex.printStackTrace();
+                }
+            }
+        });
+        //volleyService.makePOSTJSONObjectRequest("tag_create_task", METHOD_CREATE_TASK, params);
+        volleyService.makePOSTStringRequest("tag_update_task", METHOD_UPDATE_TASK, params);
+
+
     }
 
 
