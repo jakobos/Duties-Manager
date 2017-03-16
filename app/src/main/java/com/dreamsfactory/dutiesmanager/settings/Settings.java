@@ -14,6 +14,8 @@ public class Settings extends SettingsBase{
     //constants
     public final static int USER_ID = R.string.pref_user_id;
     public final static int FLAT_ID = R.string.pref_flat_id;
+    public final static int LAST_SYNC_TASK = R.string.pref_last_sync_task;
+    public final static int LAST_SYNC_FRIEND = R.string.pref_last_sync_friend;
 
 
 
