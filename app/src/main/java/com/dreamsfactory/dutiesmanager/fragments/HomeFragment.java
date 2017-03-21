@@ -20,6 +20,9 @@ import com.dreamsfactory.dutiesmanager.activities.MyTaskActivity;
 import com.dreamsfactory.dutiesmanager.adapters.HomeAdapter;
 import com.dreamsfactory.dutiesmanager.database.DbManager;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
+import com.dreamsfactory.dutiesmanager.database.services.TaskService;
+import com.dreamsfactory.dutiesmanager.managers.LogManager;
+import com.dreamsfactory.dutiesmanager.settings.Settings;
 import com.dreamsfactory.dutiesmanager.util.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -49,13 +52,28 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.homeRecyclerView);
-        generateTasksList();
-        adapter = new HomeAdapter(tasks);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(adapter);
+        //generateTasksList();
+
+
+        tasks = DbManager.getInstance(getActivity()).getTaskService().getTasksByIsDone(false);
+//        try{
+//
+//
+//        }catch(NullPointerException e){
+//            LogManager.logError(e.getLocalizedMessage());
+//        }
+
+        if(tasks != null){
+            adapter = new HomeAdapter(tasks);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+            recyclerView.setAdapter(adapter);
+
+        }
+
+
         return view;
     }
 
@@ -63,36 +81,40 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        //tasks = //DbManager.getInstance(getContext()).getTaskService().getAllTasks();
+        if(tasks != null){
+            adapter.setListener(new HomeAdapter.Listener() {
+                @Override
+                public void onClick(int position) {
 
-        adapter.setListener(new HomeAdapter.Listener() {
-            @Override
-            public void onClick(int position) {
+                    if(tasks.get(position).getOwnerId() <= 0){
+                        Intent intent = new Intent(getActivity(), FreeTaskActivity.class);
+                        intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
+                        startActivity(intent);
+                    }else if(tasks.get(position).getOwnerId() > 0 && tasks.get(position).getOwnerId() == 3){
+                        Intent intent = new Intent(getActivity(), MyTaskActivity.class);
+                        intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
+                        startActivity(intent);
+                    }else if(tasks.get(position).getOwnerId() != 3){
+                        Intent intent = new Intent(getActivity(), FriendTaskActivity.class);
+                        intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
+                        startActivity(intent);
+                    }
 
-                if(tasks.get(position).getOwnerId() <= 0){
-                    Intent intent = new Intent(getActivity(), FreeTaskActivity.class);
-                    intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
-                    startActivity(intent);
-                }else if(tasks.get(position).getOwnerId() > 0 && tasks.get(position).getOwnerId() == 3){
-                    Intent intent = new Intent(getActivity(), MyTaskActivity.class);
-                    intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
-                    startActivity(intent);
-                }else if(tasks.get(position).getOwnerId() != 3){
-                    Intent intent = new Intent(getActivity(), FriendTaskActivity.class);
-                    intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
-                    startActivity(intent);
+
+                    Toast.makeText(getActivity().getApplicationContext(), ""+position, Toast.LENGTH_LONG).show();
                 }
+            });
+        }
 
-
-                Toast.makeText(getActivity().getApplicationContext(), ""+position, Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.setListener(null);
+        if(tasks != null){
+            adapter.setListener(null);
+        }
+
     }
 
     private void generateTasksList(){
