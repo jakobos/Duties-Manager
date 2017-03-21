@@ -10,6 +10,7 @@ import com.dreamsfactory.dutiesmanager.database.entities.Flat;
 
 public class FlatService extends DbServiceBase{
     public boolean insertFlat(Flat flat){
+        deleteAllFlats();
         long id = executeQueryInsert(flat);
         if(id <= 0)
             return false;

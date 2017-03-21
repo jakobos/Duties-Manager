@@ -10,11 +10,13 @@ import com.dreamsfactory.dutiesmanager.database.entities.User;
 
 public class UserService extends DbServiceBase {
     public boolean insertUser(User user){
+        deleteAllUsers();
         long id = executeQueryInsert(user);
         if(id <= 0)
             return false;
         else
             return true;
+
     }
     public boolean updateUser(User user){
         int count = executeQueryUpdate(user);
