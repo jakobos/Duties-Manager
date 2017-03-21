@@ -15,50 +15,49 @@ import com.dreamsfactory.dutiesmanager.webServices.WebServiceManager;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FlatLoginActivity extends AppCompatActivity {
+public class FlatRegisterActivity extends AppCompatActivity {
 
     private EditText flatAddress;
     private EditText flatPassword;
-    private Button btnLogin;
-    private Button btnLinkToRegister;
-
+    private Button btnRegister;
+    private Button btnLinkToLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_flat_login);
+        setContentView(R.layout.activity_flat_register);
 
-        flatAddress = (EditText) findViewById(R.id.flatLoginAddress);
-        flatPassword = (EditText) findViewById(R.id.flatLoginPassword);
-        btnLogin = (Button) findViewById(R.id.btnFlatLogin);
-        btnLinkToRegister = (Button) findViewById(R.id.btnFlatLinkToRegisterScreen);
+        flatAddress = (EditText) findViewById(R.id.flatRegAddress);
+        flatPassword = (EditText) findViewById(R.id.flatRegPassword);
+        btnRegister = (Button) findViewById(R.id.btnFlatRegister);
+        btnLinkToLogin = (Button) findViewById(R.id.btnFlatLinkToLoginScreen);
 
         if(Settings.getInstance(this).getBoolean(Settings.USER_IS_LOGGED_IN,false) && Settings.getInstance(this).getBoolean(Settings.FLAT_IS_LOGGED_IN, false)){
-            Intent intent = new Intent(FlatLoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(FlatRegisterActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String address = flatAddress.getText().toString().trim();
                 String password = flatPassword.getText().toString().trim();
-
                 if(!address.isEmpty() && !password.isEmpty()){
 
-                    checkFlat(address, password);
+                    registerFlat(address, password);
 
                 }else{
-                    Toast.makeText(getApplicationContext(), "Please enter the credentials!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please enter flat details!", Toast.LENGTH_LONG).show();
                 }
             }
         });
-        btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
+        btnLinkToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -69,16 +68,15 @@ public class FlatLoginActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        btnLogin.setOnClickListener(null);
-        btnLinkToRegister.setOnClickListener(null);
+        btnRegister.setOnClickListener(null);
+        btnLinkToLogin.setOnClickListener(null);
     }
+    private void registerFlat(String address, String password){
 
-    private void checkFlat(String address, String password){
         Map<String, String> params = new HashMap<>();
         params.put("address", address);
         params.put("password", password);
 
-        WebServiceManager.getInstance(this).loginFlat(params);
-
+        WebServiceManager.getInstance(this).registerFlat(params);
     }
 }
