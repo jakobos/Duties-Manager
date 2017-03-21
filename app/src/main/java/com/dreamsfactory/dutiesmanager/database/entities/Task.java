@@ -18,7 +18,7 @@ public class Task extends DBEntityBase implements Parcelable {
     //Constant variables
     //
     public static final String TABLE_NAME = "Task";
-    public static final String COLUMN_NAME_TASK_ID = "TaskId";
+    //public static final String COLUMN_NAME_TASK_ID = "TaskId";
     public static final String COLUMN_NAME_TITLE = "Title";
     public static final String COLUMN_NAME_DESCRIPTION = "Description";
     public static final String COLUMN_NAME_DEADLINE = "Deadline";
@@ -34,7 +34,7 @@ public class Task extends DBEntityBase implements Parcelable {
     private long deadline;
     private boolean isDone;
     private long ownerId;
-    private long taskId;
+   // private String taskId;
 
     //
     //constructors
@@ -45,7 +45,9 @@ public class Task extends DBEntityBase implements Parcelable {
         this.deadline = 0;
         this.isDone = false;
         this.ownerId = 0;
-        this.taskId = 0;
+        setUUID("");
+        setRemoteId(0);
+//        this.taskId = "";
     }
 
     public Task(String title){
@@ -54,7 +56,9 @@ public class Task extends DBEntityBase implements Parcelable {
         this.deadline = 0;
         this.isDone = false;
         this.ownerId = 0;
-        this.taskId = 0;
+        setUUID("");
+        setRemoteId(0);
+//        this.taskId = "";
     }
     public Task(String title, long deadline, long ownerId){
         this.title = title;
@@ -62,7 +66,9 @@ public class Task extends DBEntityBase implements Parcelable {
         this.deadline = deadline;
         this.isDone = false;
         this.ownerId = ownerId;
-        this.taskId = 0;
+        setUUID("");
+        setRemoteId(0);
+ //       this.taskId = "";
     }
 
     //
@@ -72,19 +78,21 @@ public class Task extends DBEntityBase implements Parcelable {
     public static String getCreateEntries(){
         return "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
-                COLUMN_NAME_TASK_ID + INTEGER_TYPE + COMMA +
+                REMOTE_ID + INTEGER_TYPE + COMMA +
+                UNIQUE_ID + TEXT_TYPE + COMMA +
                 COLUMN_NAME_TITLE + TEXT_TYPE + COMMA +
                 COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA +
                 COLUMN_NAME_DEADLINE + INTEGER_TYPE + COMMA +
                 COLUMN_NAME_IS_DONE + INTEGER_TYPE + COMMA +
-                COLUMN_NAME_OWNER_ID + INTEGER_TYPE + COMMA + ");";
+                COLUMN_NAME_OWNER_ID + INTEGER_TYPE + ");";
     }
     public static String getDeleteEntries(){ return "DROP TABLE IF EXISTS "+ TABLE_NAME; }
 
     public static String[] getFullProjection(){
         String[] projection = {
                 _ID,
-                COLUMN_NAME_TASK_ID,
+                REMOTE_ID,
+                UNIQUE_ID,
                 COLUMN_NAME_TITLE,
                 COLUMN_NAME_DESCRIPTION,
                 COLUMN_NAME_DEADLINE,
@@ -98,7 +106,8 @@ public class Task extends DBEntityBase implements Parcelable {
     @Override
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME_TASK_ID, taskId);
+        values.put(REMOTE_ID, getRemoteId());
+        values.put(UNIQUE_ID, getUUID());
         values.put(COLUMN_NAME_TITLE, title);
         values.put(COLUMN_NAME_DESCRIPTION, description);
         values.put(COLUMN_NAME_DEADLINE, deadline);
@@ -111,7 +120,9 @@ public class Task extends DBEntityBase implements Parcelable {
     public boolean readFromCursor(Cursor cursor) {
         try{
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
-            this.taskId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_TASK_ID));
+            //this.taskId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_TASK_ID));
+            setRemoteId(cursor.getLong(cursor.getColumnIndexOrThrow(REMOTE_ID)));
+            setUUID(cursor.getString(cursor.getColumnIndexOrThrow(UNIQUE_ID)));
             this.title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_TITLE));
             this.description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DESCRIPTION));
             this.deadline = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_DEADLINE));
@@ -138,12 +149,12 @@ public class Task extends DBEntityBase implements Parcelable {
     //base class methods
     //
 
-    public long getTaskId(){
-        return taskId;
-    }
-    public void setTaskId(long taskId){
-        this.taskId = taskId;
-    }
+//    public String getTaskId(){
+//        return taskId;
+//    }
+//    public void setTaskId(String taskId){
+//        this.taskId = taskId;
+//    }
     public String getTitle(){
         return title;
     }
@@ -235,7 +246,8 @@ public class Task extends DBEntityBase implements Parcelable {
         out.writeLong(deadline);
         out.writeByte((byte) (isDone ? 1 : 0));
         out.writeLong(ownerId);
-        out.writeLong(taskId);
+        out.writeString(getUUID());
+        out.writeLong(getRemoteId());
     }
 
     public static final Parcelable.Creator<Task> CREATOR
@@ -256,7 +268,8 @@ public class Task extends DBEntityBase implements Parcelable {
         deadline = in.readLong();
         isDone = in.readByte() != 0;
         ownerId = in.readLong();
-        taskId = in.readLong();
+        setUUID(in.readString());// = in.readString();
+        setRemoteId(in.readLong());
     }
 
 

@@ -17,7 +17,7 @@ public class User extends DBEntityBase {
     public static final String TABLE_NAME = "User";
     public static final String COLUMN_NAME_USERNAME = "Username";
     public static final String COLUMN_NAME_EMAIL = "Email";
-    public static final String COLUMN_NAME_USER_ID = "UserId";
+//    public static final String COLUMN_NAME_USER_ID = "UserId";
 
     //
     //Variables
@@ -25,15 +25,17 @@ public class User extends DBEntityBase {
 
     private String name;
     private String email;
-    private long userId;
+//    private String userId;
 
     //
     //constructors
     //
     public User(){
-        this.userId = 0;
+        //this.userId = "";
+        setUUID("");
         this.name = "";
         this.email = "";
+        setRemoteId(0);
     }
 
     //
@@ -43,18 +45,20 @@ public class User extends DBEntityBase {
     public static String getCreateEntries(){
         return "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
+                REMOTE_ID + INTEGER_TYPE + COMMA +
                 COLUMN_NAME_USERNAME + TEXT_TYPE + COMMA +
                 COLUMN_NAME_EMAIL + TEXT_TYPE + COMMA +
-                COLUMN_NAME_USER_ID + INTEGER_TYPE + COMMA + ");";
+                UNIQUE_ID + TEXT_TYPE+ ");";
     }
     public static String getDeleteEntries(){ return "DROP TABLE IF EXISTS "+ TABLE_NAME; }
 
     public static String[] getFullProjection(){
         String[] projection = {
                 _ID,
+                REMOTE_ID,
                 COLUMN_NAME_USERNAME,
                 COLUMN_NAME_EMAIL,
-                COLUMN_NAME_USER_ID
+                UNIQUE_ID
         };
         return projection;
     }
@@ -63,9 +67,10 @@ public class User extends DBEntityBase {
     @Override
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
+        values.put(REMOTE_ID, getRemoteId());
         values.put(COLUMN_NAME_USERNAME, name);
         values.put(COLUMN_NAME_EMAIL, email);
-        values.put(COLUMN_NAME_USER_ID, userId);
+        values.put(UNIQUE_ID, getUUID());
         return values;
     }
 
@@ -73,9 +78,11 @@ public class User extends DBEntityBase {
     public boolean readFromCursor(Cursor cursor) {
         try{
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
+            setRemoteId(cursor.getLong(cursor.getColumnIndexOrThrow(REMOTE_ID)));
             this.name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_USERNAME));
             this.email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_EMAIL));
-            this.userId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_USER_ID));
+            //this.userId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_USER_ID));
+            setUUID(cursor.getString(cursor.getColumnIndexOrThrow(UNIQUE_ID)));
 
             return true;
 
@@ -105,10 +112,10 @@ public class User extends DBEntityBase {
     public void setEmail(String email){
         this.email = email;
     }
-    public long getUserId(){
-        return userId;
-    }
-    public void setUserId(long userId){
-        this.userId = userId;
-    }
+//    public String getUserId(){
+//        return userId;
+//    }
+//    public void setUserId(String userId){
+//        this.userId = userId;
+//    }
 }

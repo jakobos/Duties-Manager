@@ -17,9 +17,15 @@ public abstract class DBEntityBase implements BaseColumns {
     protected static String PRIMARY_KEY = " PRIMARY KEY";
     protected static String COMMA = ", ";
 
+    public static String UNIQUE_ID = "UniqueId";
+    public static String REMOTE_ID = "RemoteId";
 
     //variables
     protected long id;
+
+    //actually UNIQUE_ID is not used
+    protected String uniqueId;
+    protected long remoteId;
 
     //methods
     public abstract ContentValues getContentValues();
@@ -33,5 +39,14 @@ public abstract class DBEntityBase implements BaseColumns {
         this.id = id;
     }
 
+    public String getUUID(){
+        return uniqueId;
+    }
+    public void setUUID(String uniqueId){
+        this.uniqueId = uniqueId;
+    }
+
+    public long getRemoteId(){return this.remoteId;}
+    public void setRemoteId(long remoteId){this.remoteId = remoteId;}
 
 }

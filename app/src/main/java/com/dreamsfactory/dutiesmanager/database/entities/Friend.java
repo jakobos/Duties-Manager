@@ -15,21 +15,23 @@ public class Friend extends DBEntityBase{
     public static final String TABLE_NAME = "Friend";
     public static final String COLUMN_NAME_FRIEND_NAME = "FriendName";
     public static final String COLUMN_NAME_EMAIL = "Email";
-    public static final String COLUMN_NAME_USER_ID = "UserId";
+//    public static final String COLUMN_NAME_USER_ID = "UserId";
 
     /**
      * Variables
      */
     private String friendName;
     private String friendEmail;
-    private long userId;
+//    private String userId;
     /**
      * Constructors
      */
     public Friend(){
-        this.userId = 0;
+        //this.userId = "";
+        setUUID("");
         this.friendName = "";
         this.friendEmail = "";
+        setRemoteId(0);
     }
 
     /**
@@ -38,16 +40,18 @@ public class Friend extends DBEntityBase{
     public static String getCreateEntries(){
         return "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID + INTEGER_TYPE + PRIMARY_KEY + COMMA +
-                COLUMN_NAME_USER_ID + INTEGER_TYPE + COMMA +
+                REMOTE_ID + INTEGER_TYPE + COMMA +
+                UNIQUE_ID + TEXT_TYPE + COMMA +
                 COLUMN_NAME_FRIEND_NAME + TEXT_TYPE + COMMA +
-                COLUMN_NAME_EMAIL + TEXT_TYPE + COMMA + ");";
+                COLUMN_NAME_EMAIL + TEXT_TYPE + ");";
     }
     public static String getDeleteEntries(){ return "DROP TABLE IF EXISTS "+ TABLE_NAME; }
 
     public static String[] getFullProjection(){
         String[] projection = {
                 _ID,
-                COLUMN_NAME_USER_ID,
+                REMOTE_ID,
+                UNIQUE_ID,
                 COLUMN_NAME_FRIEND_NAME,
                 COLUMN_NAME_EMAIL
         };
@@ -59,7 +63,8 @@ public class Friend extends DBEntityBase{
     @Override
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME_USER_ID, userId);
+        values.put(REMOTE_ID, getRemoteId());
+        values.put(UNIQUE_ID, getUUID());
         values.put(COLUMN_NAME_FRIEND_NAME, friendName);
         values.put(COLUMN_NAME_EMAIL, friendEmail);
         return values;
@@ -69,7 +74,9 @@ public class Friend extends DBEntityBase{
     public boolean readFromCursor(Cursor cursor) {
         try{
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
-            this.userId = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_USER_ID));
+            setRemoteId(cursor.getLong(cursor.getColumnIndexOrThrow(REMOTE_ID)));
+            //this.userId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_USER_ID));
+            setUUID(cursor.getString(cursor.getColumnIndexOrThrow(UNIQUE_ID)));
             this.friendName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_FRIEND_NAME));
             this.friendEmail = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_EMAIL));
             return true;
@@ -86,12 +93,12 @@ public class Friend extends DBEntityBase{
 
     //public methods
 
-    public long getUserId(){
-        return userId;
-    }
-    public void setUserId(long userId){
-        this.userId = userId;
-    }
+//    public String getUserId(){
+//        return userId;
+//    }
+//    public void setUserId(String userId){
+//        this.userId = userId;
+//    }
     public String getFriendName(){
         return friendName;
     }
