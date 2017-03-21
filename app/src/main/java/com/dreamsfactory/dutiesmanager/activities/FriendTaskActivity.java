@@ -40,7 +40,7 @@ public class FriendTaskActivity extends AppCompatActivity {
         super.onDestroy();
         if(checkBoxIsDone.isChecked()){
             Map<String, String> params = new HashMap<String, String>();
-            params.put("task_id", String.valueOf(task.getTaskId()));
+            params.put("task_id", String.valueOf(task.getRemoteId()));
             params.put("is_done", String.valueOf(1));
             WebServiceManager.getInstance(getBaseContext()).updateTask(params);
         }

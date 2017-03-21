@@ -8,6 +8,7 @@ import com.dreamsfactory.dutiesmanager.database.services.FlatService;
 import com.dreamsfactory.dutiesmanager.database.services.FriendService;
 import com.dreamsfactory.dutiesmanager.database.services.TaskService;
 import com.dreamsfactory.dutiesmanager.database.services.UserService;
+import com.dreamsfactory.dutiesmanager.managers.LogManager;
 
 /**
  * Created by Kuba on 2017-03-01.
@@ -35,6 +36,7 @@ public class DbManager {
     private static synchronized DbManager get(Context context){
         if(_instance == null){
             _instance = new DbManager(context);
+            _instance.init();
         }
         return _instance;
     }
@@ -56,7 +58,8 @@ public class DbManager {
     }
 
     public void init(){
-        if(initialized){
+        if(!initialized){
+            LogManager.logInfo("DbManager init()");
             dbClient = new DbHelper(mContext);
             DbServiceBase.init(dbClient);
 
@@ -66,6 +69,8 @@ public class DbManager {
             flatService = new FlatService();
 
             initialized = true;
+        }else{
+            LogManager.logInfo("initialized = true");
         }
     }
 

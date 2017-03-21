@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.dreamsfactory.dutiesmanager.database.DbHelper;
 import com.dreamsfactory.dutiesmanager.database.entities.DBEntityBase;
+import com.dreamsfactory.dutiesmanager.managers.LogManager;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ public class DbServiceBase {
     private static DbHelper dbClient;
 
     public static void init(DbHelper dbClient){
+        LogManager.logInfo("DBServiceBase init()");
         DbServiceBase.dbClient = dbClient;
     }
 
@@ -29,11 +31,11 @@ public class DbServiceBase {
         return dbWrite().insert(entity.getTableName(), null, values);
     }
     protected int executeQueryUpdate(DBEntityBase entity){
-        if(entity.getId() <= 0)
+        if(entity.getRemoteId() <= 0)
             return 0;
         ContentValues values = entity.getContentValues();
-        String whereClause = DBEntityBase._ID+" = ?";
-        return dbWrite().update(entity.getTableName(), values, whereClause, new String[] {String.valueOf(entity.getId())});
+        String whereClause = DBEntityBase.REMOTE_ID + " = ?";
+        return dbWrite().update(entity.getTableName(), values, whereClause, new String[] {String.valueOf(entity.getRemoteId())});
     }
 
     protected int executeQueryUpdate(DBEntityBase entity, String comparisonColumn, String value){
@@ -99,6 +101,11 @@ public class DbServiceBase {
     }
 
     private SQLiteDatabase dbRead(){
+        if(dbClient == null){
+            LogManager.logInfo("cbClient is null");
+        }else{
+            LogManager.logInfo("dbClient is not null");
+        }
         return dbClient.getReadableDatabase();
     }
     private SQLiteDatabase dbWrite(){

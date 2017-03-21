@@ -43,7 +43,7 @@ public class FreeTaskActivity extends AppCompatActivity {
         super.onDestroy();
         if(checkBoxDoIt.isChecked()){
             Map<String, String> params = new HashMap<String, String>();
-            params.put("task_id", String.valueOf(task.getTaskId()));
+            params.put("task_id", String.valueOf(task.getRemoteId()));
             params.put("owner_id", Settings.getInstance(getBaseContext()).get(Settings.USER_ID));
             WebServiceManager.getInstance(getBaseContext()).updateTask(params);
         }

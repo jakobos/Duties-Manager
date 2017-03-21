@@ -45,7 +45,7 @@ public class FriendService extends DbServiceBase {
         return friends;
     }
     public Friend getFriend(long userId){
-        Cursor cursor = executeQueryWhere(Friend.TABLE_NAME, Friend.getFullProjection(), Friend.COLUMN_NAME_USER_ID, String.valueOf(userId));
+        Cursor cursor = executeQueryWhere(Friend.TABLE_NAME, Friend.getFullProjection(), Friend.REMOTE_ID, String.valueOf(userId));
         if(cursor.getCount() == 0)
             return null;
 

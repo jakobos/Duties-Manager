@@ -1,8 +1,10 @@
 package com.dreamsfactory.dutiesmanager.database.services;
 
 import android.database.Cursor;
+import android.util.Log;
 
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
+import com.dreamsfactory.dutiesmanager.managers.LogManager;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -46,8 +48,8 @@ public class TaskService extends DbServiceBase {
     public ArrayList<Task> getTasksByUserId(long userId){
         Cursor cursor = executeQueryWhere(Task.TABLE_NAME, Task.getFullProjection(), Task.COLUMN_NAME_OWNER_ID, String.valueOf(userId));
 
-        if(cursor.getCount() == 0)
-            return null;
+//        if(cursor.getCount() == 0)
+//            return null;
 
         ArrayList<Task> tasks = new ArrayList<>();
         for(int i = 0; i < cursor.getCount(); i++){
@@ -60,8 +62,8 @@ public class TaskService extends DbServiceBase {
     }
     public ArrayList<Task> getTasksByFree(){
         Cursor cursor = executeQueryWhere(Task.TABLE_NAME, Task.getFullProjection(), Task.COLUMN_NAME_OWNER_ID, String.valueOf(0));
-        if(cursor.getCount() == 0)
-            return null;
+//        if(cursor.getCount() == 0)
+//            return null;
 
         ArrayList<Task> tasks = new ArrayList<>();
         for(int i = 0; i < cursor.getCount(); i++){
@@ -79,8 +81,8 @@ public class TaskService extends DbServiceBase {
         else
             value = 0;
         Cursor cursor = executeQueryWhere(Task.TABLE_NAME, Task.getFullProjection(), Task.COLUMN_NAME_IS_DONE, String.valueOf(value));
-        if(cursor.getCount() == 0)
-            return null;
+//        if(cursor.getCount() == 0)
+//            return null;
 
         ArrayList<Task> tasks = new ArrayList<>();
         for(int i = 0; i < cursor.getCount(); i++){
@@ -92,8 +94,13 @@ public class TaskService extends DbServiceBase {
         return tasks;
     }
     public Task getTask(long taskId){
+        LogManager.logError("in getTask() method");
         Cursor cursor = executeQueryWhere(Task.TABLE_NAME, Task.getFullProjection(), Task._ID, String.valueOf(taskId));
-
+        if(cursor == null){
+            LogManager.logError("Cursor is null");
+        }else{
+            LogManager.logInfo("Cursor is not null");
+        }
         if(cursor.getCount() == 0)
             return null;
         cursor.moveToFirst();

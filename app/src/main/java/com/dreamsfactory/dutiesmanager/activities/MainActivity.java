@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamsfactory.dutiesmanager.R;
+import com.dreamsfactory.dutiesmanager.database.DbManager;
 import com.dreamsfactory.dutiesmanager.fragments.FreeTasksFragment;
 import com.dreamsfactory.dutiesmanager.fragments.HomeFragment;
 import com.dreamsfactory.dutiesmanager.fragments.MyTasksFragment;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -91,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+
+        //DbManager.getInstance(this).init();
     }
 
     @Override

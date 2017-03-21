@@ -30,7 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/new_task_title_hint"
-            android:id="@+id/newTaskTitleEditText" />
+            android:id="@+id/newTaskTitleEditText"
+            android:inputType="text|textCapSentences" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -41,7 +42,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/new_task_descr_hint"
-            android:id="@+id/newTaskDescriptionEditText" />
+            android:id="@+id/newTaskDescriptionEditText"
+            android:inputType="text|textCapSentences" />
 
     </android.support.design.widget.TextInputLayout>
 
