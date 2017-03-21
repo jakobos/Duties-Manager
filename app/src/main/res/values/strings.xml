@@ -40,6 +40,21 @@
     <string name="text_see_details">Zobacz szczegóły</string>
     <string name="pref_user_id">userId</string>
     <string name="pref_flat_id">flatId</string>
-    <string name="pref_last_sync_task">last_sync_task</string>
-    <string name="pref_last_sync_friend">last_sync_friend</string>
+    <string name="pref_last_sync_task">lastSyncTask</string>
+    <string name="pref_last_sync_friend">lastSyncFriend</string>
+
+
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_name">Fullname</string>
+    <string name="btn_login">LOGIN</string>
+    <string name="btn_register">REGISTER</string>
+    <string name="btn_link_to_register">Not a member? Sign up now.</string>
+    <string name="btn_link_to_login">Already registred! Login Me.</string>
+    <string name="welcome">Welcome</string>
+    <string name="btn_logout">LOGOUT</string>
+    <string name="name">Fullname</string>
+    <string name="hint_address">Address</string>
+    <string name="pref_user_is_logged_in">userIsLoggedin</string>
+    <string name="pref_flat_is_logged_in">flatIsLoggedIn</string>
 </resources>

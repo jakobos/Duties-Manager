@@ -15,26 +15,27 @@ import com.dreamsfactory.dutiesmanager.webServices.WebServiceManager;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserLoginActivity extends AppCompatActivity {
+public class UserRegisterActivity extends AppCompatActivity {
 
+    private EditText userName;
     private EditText userEmail;
     private EditText userPassword;
-    private Button btnLogin;
-    private Button btnLinkToRegister;
-
+    private Button btnRegister;
+    private Button btnLinkToLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_login);
+        setContentView(R.layout.activity_user_register);
 
-        userEmail = (EditText) findViewById(R.id.userEmail);
-        userPassword = (EditText) findViewById(R.id.userPassword);
-        btnLogin = (Button) findViewById(R.id.btnUserLogin);
-        btnLinkToRegister = (Button) findViewById(R.id.btnUserLinkToRegisterScreen);
+        userName = (EditText)findViewById(R.id.userRegName);
+        userEmail = (EditText) findViewById(R.id.userRegEmail);
+        userPassword = (EditText) findViewById(R.id.userRegPassword);
+        btnRegister = (Button) findViewById(R.id.btnUserRegister);
+        btnLinkToLogin = (Button) findViewById(R.id.btnUserLinkToLoginScreen);
 
         if(Settings.getInstance(this).getBoolean(Settings.USER_IS_LOGGED_IN, false)){
-            Intent intent = new Intent(UserLoginActivity.this, FlatLoginActivity.class);
+            Intent intent = new Intent(UserRegisterActivity.this, FlatLoginActivity.class);
             startActivity(intent);
             finish();
         }
@@ -45,50 +46,44 @@ public class UserLoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String username = userName.getText().toString().trim();
                 String email = userEmail.getText().toString().trim();
                 String password = userPassword.getText().toString().trim();
 
-                if(!email.isEmpty() && !password.isEmpty()){
-
-                    checkLogin(email, password);
+                if(!username.isEmpty() && !email.isEmpty() && !password.isEmpty()){
+                    registerUser(username, email, password);
 
                 }else{
-
-                    Toast.makeText(getApplicationContext(), "Please enter the credentials.", Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
-        btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
+        btnLinkToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserLoginActivity.this, UserRegisterActivity.class);
+                Intent intent = new Intent(UserRegisterActivity.this, UserLoginActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        btnLogin.setOnClickListener(null);
-        btnLinkToRegister.setOnClickListener(null);
+        btnRegister.setOnClickListener(null);
+        btnLinkToLogin.setOnClickListener(null);
     }
 
-    private void checkLogin(String email, String password){
+    private void registerUser(String username, String email, String password){
 
         Map<String, String> params = new HashMap<>();
+        params.put("name", username);
         params.put("email", email);
         params.put("password", password);
-
-        WebServiceManager.getInstance(this).loginUser(params);
+        WebServiceManager.getInstance(this).registerUser(params);
     }
-
-
 }
