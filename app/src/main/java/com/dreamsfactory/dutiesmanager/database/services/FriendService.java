@@ -53,6 +53,13 @@ public class FriendService extends DbServiceBase {
         Friend friend = new Friend();
         return friend.readFromCursor(cursor) ? friend : null;
     }
+    public boolean deleteAllFriends(){
+        int count = executeQueryDelete(Friend.TABLE_NAME);
+        if(count > 0)
+            return true;
+        else
+            return false;
+    }
 
 
 

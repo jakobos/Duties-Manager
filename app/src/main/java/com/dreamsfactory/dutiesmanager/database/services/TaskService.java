@@ -107,6 +107,13 @@ public class TaskService extends DbServiceBase {
         Task task = new Task();
         return task.readFromCursor(cursor) ? task : null;
     }
+    public boolean deleteAllTasks(){
+        int count = executeQueryDelete(Task.TABLE_NAME);
+        if(count > 0)
+            return true;
+        else
+            return false;
+    }
 
 
 }
