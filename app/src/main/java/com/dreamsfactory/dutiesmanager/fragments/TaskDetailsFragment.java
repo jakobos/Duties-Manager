@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dreamsfactory.dutiesmanager.R;
+import com.dreamsfactory.dutiesmanager.database.DbManager;
+import com.dreamsfactory.dutiesmanager.database.entities.Friend;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
 
 /**
@@ -65,7 +67,9 @@ public class TaskDetailsFragment extends Fragment {
         if(task.getOwnerId() > 0){
             ownerText.setVisibility(View.VISIBLE);
             ownerName.setVisibility(View.VISIBLE);
-            //set owner name
+            Friend friend = DbManager.getInstance(getContext()).getFriendService().getFriend(task.getOwnerId());
+            if(friend != null)
+                ownerName.setText(friend.getFriendName());
         }
         description.setText(task.getDescription());
 
