@@ -230,9 +230,10 @@ public class Task extends DBEntityBase implements Parcelable {
         }else{
             text = "0 min.";
         }
-
-
         return text;
+    }
+    public long getMilis(){
+        return deadline - Calendar.getInstance().getTimeInMillis();
     }
 
 
