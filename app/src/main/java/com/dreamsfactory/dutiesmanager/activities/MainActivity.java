@@ -1,5 +1,8 @@
 package com.dreamsfactory.dutiesmanager.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -24,10 +27,14 @@ import android.widget.Toast;
 
 import com.dreamsfactory.dutiesmanager.R;
 import com.dreamsfactory.dutiesmanager.database.DbManager;
+import com.dreamsfactory.dutiesmanager.database.entities.Flat;
+import com.dreamsfactory.dutiesmanager.database.entities.User;
 import com.dreamsfactory.dutiesmanager.fragments.FreeTasksFragment;
 import com.dreamsfactory.dutiesmanager.fragments.HomeFragment;
 import com.dreamsfactory.dutiesmanager.fragments.MyTasksFragment;
 import com.dreamsfactory.dutiesmanager.managers.LogManager;
+import com.dreamsfactory.dutiesmanager.services.SyncService;
+import com.dreamsfactory.dutiesmanager.settings.Settings;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private View navHeader;
     private ImageView imgNavHeaderBg, imgProfile;
-    private TextView txtName, txtEmail;
+    private TextView txtName, txtEmail, txtFlat;
     private Toolbar toolbar;
     private FloatingActionButton fab;
 
@@ -47,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_HOME = "home";
     private static final String TAG_MY_TASKS = "my_tasks";
     private static final String TAG_FREE_TASKS =  "free_tasks";
+    private static final String TAG_LOGOUT = "logout";
     public static String CURRENT_TAG = TAG_HOME;
 
     //toolbar items respected to selected nav menu item
@@ -78,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         navHeader = navigationView.getHeaderView(0);
         txtName = (TextView) navHeader.findViewById(R.id.name);
         txtEmail = (TextView) navHeader.findViewById(R.id.email);
+        txtFlat = (TextView) navHeader.findViewById(R.id.flat);
         imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
         imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
 
@@ -87,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
         loadNavHeader();
 
         setUpNavigationView();
+
+        startSyncService();
 
         if(savedInstanceState == null){
             navItemIndex = 0;
@@ -126,8 +137,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadNavHeader(){
-        txtName.setText("Kuba");
-        txtEmail.setText("kuba@gmail,com");
+        User user = DbManager.getInstance(this).getUserService().getUser();
+        Flat flat = DbManager.getInstance(this).getFlatService().getFlat();
+        txtName.setText(user.getName());
+        txtEmail.setText(user.getEmail());
+        txtFlat.setText(flat.getAddress());
+
     }
 
     private void loadHomeFragment(){
@@ -188,7 +203,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void startSyncService(){
+        Intent alarmIntent = new Intent(MainActivity.this, SyncService.class);
+        // Pending Intent Object
+        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // Alarm Manager Object
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        // Alarm Manager calls BroadCast for every Ten seconds (10 * 1000), BroadCase further calls service to check if new records are inserted in
+        // Remote MySQL DB
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                5*1000,
+                30*1000, pendingIntent);
+    }
 
+    private void logout(){
+
+        Settings.getInstance(this).set(Settings.USER_IS_LOGGED_IN, false);
+        Settings.getInstance(this).set(Settings.FLAT_IS_LOGGED_IN, false);
+        Settings.getInstance(this).set(Settings.USER_ID, 0);
+        Settings.getInstance(this).set(Settings.FLAT_ID, 0);
+        Settings.getInstance(this).set(Settings.LAST_SYNC_TASK, 0);
+        Settings.getInstance(this).set(Settings.LAST_SYNC_FRIEND, 0);
+
+        DbManager.getInstance(this).getUserService().deleteAllUsers();
+        DbManager.getInstance(this).getFlatService().deleteAllFlats();
+        DbManager.getInstance(this).getFriendService().deleteAllFriends();
+        DbManager.getInstance(this).getTaskService().deleteAllTasks();
+
+        Intent intent = new Intent(MainActivity.this, UserLoginActivity.class);
+        startActivity(intent);
+        finish();
+
+
+    }
     private void setUpNavigationView(){
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -205,6 +252,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_free_tasks:
                         navItemIndex = 2;
                         CURRENT_TAG = TAG_FREE_TASKS;
+                        break;
+                    case R.id.nav_logout:
+                        logout();
                         break;
                     default:
                         navItemIndex = 0;

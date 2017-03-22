@@ -15,5 +15,12 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/nav_free_tasks" />
     </group>
+    <item android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:title="@string/nav_logout" />
+        </menu>
+    </item>
 
 </menu>
