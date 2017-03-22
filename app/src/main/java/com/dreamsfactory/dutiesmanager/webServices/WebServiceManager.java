@@ -10,10 +10,12 @@ import android.widget.Toast;
 import com.dreamsfactory.dutiesmanager.activities.FlatLoginActivity;
 import com.dreamsfactory.dutiesmanager.activities.FlatRegisterActivity;
 import com.dreamsfactory.dutiesmanager.activities.MainActivity;
+import com.dreamsfactory.dutiesmanager.activities.NewTaskActivity;
 import com.dreamsfactory.dutiesmanager.activities.UserLoginActivity;
 import com.dreamsfactory.dutiesmanager.activities.UserRegisterActivity;
 import com.dreamsfactory.dutiesmanager.database.DbManager;
 import com.dreamsfactory.dutiesmanager.database.entities.Flat;
+import com.dreamsfactory.dutiesmanager.database.entities.Friend;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
 import com.dreamsfactory.dutiesmanager.database.entities.User;
 import com.dreamsfactory.dutiesmanager.managers.LogManager;
@@ -25,6 +27,8 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,48 +37,59 @@ import java.util.Map;
 
 public class WebServiceManager {
 
-    public final static String SERVER_URI = "http://192.168.8.102/duties_manager_api";
+    private final static String SERVER_URI = "http://192.168.8.100/duties_manager_api";
 
-    public final static String METHOD_GET_COUNTS = "get_counts.php";
+    private final static String METHOD_GET_COUNTS = "get_counts.php";
 
-    public final static String METHOD_GET_FRIENDS = "";
-    public final static String METHOD_GET_TASKS = "";
+    private final static String METHOD_GET_FRIENDS = "get_friends.php";
+    private final static String METHOD_GET_TASKS = "get_tasks.php";
 
-    public final static String METHOD_CREATE_TASK = "create_task.php";
-    public final static String METHOD_UPDATE_TASK = "update_task.php";
+    private final static String METHOD_CREATE_TASK = "create_task.php";
+    private final static String METHOD_UPDATE_TASK = "update_task.php";
 
-    public final static String METHOD_REGISTER_USER = "register_user.php";
-    public final static String METHOD_LOGIN_USER = "login_user.php";
+    private final static String METHOD_REGISTER_USER = "register_user.php";
+    private final static String METHOD_LOGIN_USER = "login_user.php";
 
-    public final static String METHOD_REGISTER_FLAT = "";
-    public final static String METHOD_LOGIN_FLAT = "login_flat.php";
+    private final static String METHOD_REGISTER_FLAT = "register_flat.php";
+    private final static String METHOD_LOGIN_FLAT = "login_flat.php";
 
-    public final static String RESPONSE_ERROR = "error";
-    public final static String RESPONSE_ERROR_MSG = "error_msg";
+    private final static String RESPONSE_ERROR = "error";
+    private final static String RESPONSE_ERROR_MSG = "error_msg";
 
-    public final static String RESPONSE_USER_ID = "uid";
-    public final static String RESPONSE_USER_NAME = "name";
-    public final static String RESPONSE_USER_EMAIL = "email";
-    public final static String RESPONSE_USER = "user";
+    private final static String RESPONSE_USER_ID = "uid";
+    private final static String RESPONSE_USER_NAME = "name";
+    private final static String RESPONSE_USER_EMAIL = "email";
+    private final static String RESPONSE_USER = "user";
 
-    public final static String RESPONSE_CREATED_AT = "created_at";
-    public final static String RESPONSE_UPDATED_AT = "updated_at";
+    private final static String RESPONSE_CREATED_AT = "created_at";
+    private final static String RESPONSE_UPDATED_AT = "updated_at";
 
-    public final static String RESPONSE_TASK = "task";
-    public final static String RESPONSE_TASKS = "tasks";
-    public final static String RESPONSE_TASK_ID = "tid";
-    public final static String RESPONSE_OWNER_ID = "oid";
-    public final static String RESPONSE_TASK_TITLE = "title";
-    public final static String RESPONSE_TASK_DESCRIPTION = "description";
-    public final static String RESPONSE_TASK_DEADLINE = "deadline";
-    public final static String RESPONSE_TASK_IS_DONE = "is_done";
+    private final static String RESPONSE_TASK = "task";
+    private final static String RESPONSE_TASKS = "tasks";
+    private final static String RESPONSE_TASK_ID = "tid";
+    private final static String RESPONSE_OWNER_ID = "oid";
+    private final static String RESPONSE_TASK_TITLE = "title";
+    private final static String RESPONSE_TASK_DESCRIPTION = "description";
+    private final static String RESPONSE_TASK_DEADLINE = "deadline";
+    private final static String RESPONSE_TASK_IS_DONE = "is_done";
 
-    public final static String RESPONSE_FLAT_ID = "fid";
-    public final static String RESPONSE_FLAT_ADDRESS = "address";
-    public final static String RESPONSE_FLAT = "flat";
+    private final static String RESPONSE_FRIENDS = "friends";
+    private final static String RESPONSE_FRIEND_ID = "fid";
+    private final static String RESPONSE_FRIEND_NAME = "name";
+    private final static String RESPONSE_FRIEND_EMAIL = "email";
 
-    public final static String RESPONSE_LAST_SYNC_FRIEND = "last_sync_friend";
-    public final static String RESPONSE_LAST_SYNC_TASK = "last_sync_task";
+
+    private final static String RESPONSE_FLAT_ID = "fid";
+    private final static String RESPONSE_FLAT_ADDRESS = "address";
+    private final static String RESPONSE_FLAT = "flat";
+
+    private final static String RESPONSE_LAST_SYNC_FRIEND = "last_sync_friend";
+    private final static String RESPONSE_LAST_SYNC_TASK = "last_sync_task";
+
+    private final static String RESPONSE_IS_NEW_TASK = "is_new_task";
+    private final static String RESPONSE_IS_NEW_FRIEND = "is_new_friend";
+
+
 
 
 
@@ -82,7 +97,7 @@ public class WebServiceManager {
 
 
     private WeakReference<Context> mRef;
-    //private Context mContext;
+    private Context mContext;
 
     private static final String TAG = WebServiceManager.class.getSimpleName();
 
@@ -92,12 +107,13 @@ public class WebServiceManager {
 
     private WebServiceManager(Context context){
         mRef = new WeakReference<>(context);
-        //this.mContext = context;
+        this.mContext = context.getApplicationContext();
     }
     public static synchronized WebServiceManager getInstance(Context context){
         //init();
         if(_instance == null){
-            _instance = new WebServiceManager(context.getApplicationContext());
+
+            _instance = new WebServiceManager(context);
         }
         return _instance;
     }
@@ -137,7 +153,7 @@ public class WebServiceManager {
 
                     if(!error){
 
-                        Settings.getInstance(mRef.get()).set(Settings.USER_IS_LOGGED_IN, true);
+
 
                         String userId = JSONresponse.getString(RESPONSE_USER_ID);
 
@@ -153,12 +169,13 @@ public class WebServiceManager {
                         user.setName(name);
                         user.setEmail(email);
 
-                        if(DbManager.getInstance(mRef.get()).getUserService().insertUser(user)){
-                            Intent intent = new Intent(mRef.get(), FlatLoginActivity.class);
-                            mRef.get().startActivity(intent);
-                            ((UserLoginActivity)mRef.get()).finish();
-                            //todo finish activity
+                        if(DbManager.getInstance(mContext).getUserService().insertUser(user)){
 
+                            Settings.getInstance(mContext).set(Settings.USER_ID, Long.valueOf(userId));
+                            Settings.getInstance(mContext).set(Settings.USER_IS_LOGGED_IN, true);
+
+                            UserLoginActivity activity = (UserLoginActivity) mRef.get();
+                            activity.nextToFlatActivity();
 
                         }
 
@@ -223,11 +240,10 @@ public class WebServiceManager {
                         user.setName(name);
                         user.setEmail(email);
 
-                        Toast.makeText(mRef.get().getApplicationContext(), "User succesfully registered. Try login now!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "User succesfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
-                        Intent intent = new Intent(mRef.get(), UserLoginActivity.class);
-                        mRef.get().startActivity(intent);
-                        ((UserRegisterActivity)mRef.get()).finish();
+                        UserRegisterActivity activity = (UserRegisterActivity)mRef.get();
+                        activity.backToLoginActivity();
 
 
 
@@ -289,11 +305,10 @@ public class WebServiceManager {
                         flat.setRemoteId(Long.valueOf(flatId));
                         flat.setAddress(address);
 
-                        Toast.makeText(mRef.get().getApplicationContext(), "Flat succesfully registered. Try login now!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "Flat succesfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
-                        Intent intent = new Intent(mRef.get(), FlatLoginActivity.class);
-                        mRef.get().startActivity(intent);
-                        ((FlatRegisterActivity)mRef.get()).finish();
+                        FlatRegisterActivity activity = (FlatRegisterActivity)mRef.get();
+                        activity.backToLoginActivity();
 
 
 
@@ -313,7 +328,7 @@ public class WebServiceManager {
             }
         });
 
-        volleyService.makePOSTStringRequest("tag_register_user", makeURI(METHOD_REGISTER_USER), params);
+        volleyService.makePOSTStringRequest("tag_register_user", makeURI(METHOD_REGISTER_FLAT), params);
     }
 
     public void loginFlat(Map<String, String> params){
@@ -341,7 +356,7 @@ public class WebServiceManager {
 
                     if(!error){
 
-                        Settings.getInstance(mRef.get()).set(Settings.FLAT_IS_LOGGED_IN, true);
+
 
                         String flatId = JSONresponse.getString(RESPONSE_FLAT_ID);
 
@@ -355,11 +370,12 @@ public class WebServiceManager {
                         flat.setRemoteId(Long.valueOf(flatId));
                         flat.setAddress(address);
 
-                        if(DbManager.getInstance(mRef.get()).getFlatService().insertFlat(flat)){
-                            Intent intent = new Intent(mRef.get(), MainActivity.class);
-                            mRef.get().startActivity(intent);
-                            ((FlatLoginActivity)mRef.get()).finish();
-                            //todo finish activity
+                        if(DbManager.getInstance(mContext).getFlatService().insertFlat(flat)){
+                            Settings.getInstance(mContext).set(Settings.FLAT_ID, Long.valueOf(flatId));
+                            Settings.getInstance(mContext).set(Settings.FLAT_IS_LOGGED_IN, true);
+                            FlatLoginActivity activity = (FlatLoginActivity) mRef.get();
+                            activity.nextToMainActivity();
+
 
 
                         }
@@ -384,7 +400,16 @@ public class WebServiceManager {
 
     }
 
-    public void getCount(Map<String, String> params){
+    public void syncWithRemote(String userId, String flatId, String lastSyncTask, String lastSyncFriend){
+        getCount(userId, flatId, lastSyncTask, lastSyncFriend);
+    }
+
+    private void getCount(final String userId, final String flatId, final String lastSyncTask, final String lastSyncFriend){
+
+        Map<String, String> params = new HashMap<>();
+        params.put("flat_id", flatId);
+        params.put("last_sync_task", lastSyncTask);
+        params.put("last_sync_friend", lastSyncFriend);
 
         VolleyService volleyService = new VolleyService();
         volleyService.setListener(new VolleyService.Listener() {
@@ -401,6 +426,47 @@ public class WebServiceManager {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Login Response: " + response);
+                try{
+                    JSONObject JSONresponse = new JSONObject(response);
+                    boolean error = JSONresponse.getBoolean(RESPONSE_ERROR);
+
+                    if(!error){
+
+                        boolean isNewTask = JSONresponse.getBoolean(RESPONSE_IS_NEW_TASK);
+                        boolean isNewFriend = JSONresponse.getBoolean(RESPONSE_IS_NEW_FRIEND);
+
+                        if(isNewTask){
+                            LogManager.logInfo("There is new task");
+                            Map<String, String> taskParams = new HashMap<String, String>();
+                            taskParams.put("flat_id", flatId);
+                            taskParams.put("last_sync", lastSyncTask);
+
+                            getTasks(taskParams);
+                        }else{
+                            LogManager.logInfo("No new tasks");
+                        }
+                        if(isNewFriend){
+                            LogManager.logInfo("There is new friend");
+                            Map<String, String> friendParams = new HashMap<String, String>();
+                            friendParams.put("flat_id", flatId);
+                            friendParams.put("last_sync", lastSyncFriend);
+                            friendParams.put("user_id", userId);
+
+                            getFriends(friendParams);
+                        }else{
+                            LogManager.logInfo("No new friends");
+                        }
+
+                    }else{
+
+                        String errorMsg = JSONresponse.getString(RESPONSE_ERROR_MSG);
+                        LogManager.logError(errorMsg);
+
+                    }
+
+                }catch(JSONException ex){
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -408,23 +474,32 @@ public class WebServiceManager {
 
     }
 
-    public void getTasks(){
+    private void getTasks(Map<String, String> params){
         VolleyService volleyService = new VolleyService();
         volleyService.setListener(new VolleyService.Listener() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d(TAG, "Login Response: " + response.toString());
-                //hideDialog();
-                try{
 
-                    boolean error = response.getBoolean(RESPONSE_ERROR);
+            }
+
+            @Override
+            public void onResponse(JSONArray response) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONObject JSONresponse = new JSONObject(response);
+                    //boolean error = JSONresponse.getBoolean(RESPONSE_ERROR);
+                    boolean error = JSONresponse.getBoolean(RESPONSE_ERROR);
 
                     if(!error){
-
+                        Settings.getInstance(mContext).set(Settings.LAST_SYNC_TASK, Calendar.getInstance().getTimeInMillis());
                         JSONArray objects;
                         // images found
                         // Getting Array of images
-                        objects = response.getJSONArray(RESPONSE_TASKS);
+                        objects = JSONresponse.getJSONArray(RESPONSE_TASKS);
 
                         //ArrayList<Task> tasksList = new ArrayList<>();
 
@@ -447,7 +522,9 @@ public class WebServiceManager {
                             task.setDeadline(Long.valueOf(deadline));
                             task.setIsDone(Boolean.valueOf(isDone));
 
-                            DbManager.getInstance(mRef.get()).getTaskService().insertTask(task);
+                            if(!DbManager.getInstance(mContext).getTaskService().updateTask(task))
+                                DbManager.getInstance(mContext).getTaskService().insertTask(task);
+
                             //tasksList.add(task);
                         }
 
@@ -455,7 +532,7 @@ public class WebServiceManager {
 
                     }else{
 
-                        String errorMsg = response.getString(RESPONSE_ERROR_MSG);
+                        String errorMsg = JSONresponse.getString(RESPONSE_ERROR_MSG);
                         LogManager.logError(errorMsg);
 
                     }
@@ -463,7 +540,18 @@ public class WebServiceManager {
                 }catch(JSONException ex){
                     ex.printStackTrace();
                 }
+            }
+        });
+        volleyService.makePOSTStringRequest("tag_get_tasks", makeURI(METHOD_GET_TASKS), params);
 
+
+
+    }
+    private void getFriends(Map<String, String> params){
+        VolleyService volleyService = new VolleyService();
+        volleyService.setListener(new VolleyService.Listener() {
+            @Override
+            public void onResponse(JSONObject response) {
 
             }
 
@@ -474,10 +562,55 @@ public class WebServiceManager {
 
             @Override
             public void onResponse(String response) {
+                try{
+                    JSONObject JSONresponse = new JSONObject(response);
+                    //boolean error = JSONresponse.getBoolean(RESPONSE_ERROR);
+                    boolean error = JSONresponse.getBoolean(RESPONSE_ERROR);
 
+                    if(!error){
+                        Settings.getInstance(mContext).set(Settings.LAST_SYNC_FRIEND, Calendar.getInstance().getTimeInMillis());
+                        JSONArray objects;
+                        // images found
+                        // Getting Array of images
+                        objects = JSONresponse.getJSONArray(RESPONSE_FRIENDS);
+
+                        //ArrayList<Task> tasksList = new ArrayList<>();
+
+                        // looping through All Products
+                        for (int i = 0; i < objects.length(); i++) {
+                            JSONObject friendObj = objects.getJSONObject(i);
+
+                            String friendId = friendObj.getString(RESPONSE_FRIEND_ID);
+                            String name = friendObj.getString(RESPONSE_FRIEND_NAME);
+                            String email = friendObj.getString(RESPONSE_FRIEND_EMAIL);
+
+
+                            Friend friend = new Friend();
+                            friend.setRemoteId(Long.valueOf(friendId));
+                            friend.setFriendName(name);
+                            friend.setFriendEmail(email);
+
+                            if(!DbManager.getInstance(mContext).getFriendService().updateFriend(friend))
+                                DbManager.getInstance(mContext).getFriendService().insertFriend(friend);
+
+                            //tasksList.add(task);
+                        }
+
+
+
+                    }else{
+
+                        String errorMsg = JSONresponse.getString(RESPONSE_ERROR_MSG);
+                        LogManager.logError(errorMsg);
+
+                    }
+
+                }catch(JSONException ex){
+                    ex.printStackTrace();
+                }
             }
         });
-        //volleyService.makePOSTJSONObjectRequest();
+        volleyService.makePOSTStringRequest("tag_get_friends", makeURI(METHOD_GET_FRIENDS), params);
 
 
 
@@ -530,8 +663,9 @@ public class WebServiceManager {
                         task.setDeadline(Long.valueOf(deadline));
                         task.setIsDone(Boolean.valueOf(isDone));
 
-                        DbManager.getInstance(mRef.get()).getTaskService().insertTask(task);
-
+                        DbManager.getInstance(mContext).getTaskService().insertTask(task);
+                        NewTaskActivity activity = (NewTaskActivity) mRef.get();
+                        activity.finish();
 
 
                     }else{
@@ -591,9 +725,14 @@ public class WebServiceManager {
                         task.setTitle(title);
                         task.setDescription(description);
                         task.setDeadline(Long.valueOf(deadline));
-                        task.setIsDone(Boolean.valueOf(isDone));
+                        LogManager.logInfo("is done = "+isDone);
+                        if(Integer.valueOf(isDone) > 0)
+                            task.setIsDone(true);
+                        else
+                            task.setIsDone(false);
+                        LogManager.logInfo("Task is done: "+task.getIsDone().toString());
 
-                        if(DbManager.getInstance(mRef.get()).getTaskService().updateTask(task)){
+                        if(DbManager.getInstance(mContext).getTaskService().updateTask(task)){
                             LogManager.logInfo("Task updated succesfully!");
                         }else{
                             LogManager.logInfo("Error occured during updating task..");
