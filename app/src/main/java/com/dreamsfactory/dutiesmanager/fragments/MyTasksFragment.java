@@ -24,6 +24,8 @@ import com.dreamsfactory.dutiesmanager.util.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -66,6 +68,12 @@ public class MyTasksFragment extends Fragment {
     public void onStart() {
         super.onStart();
         tasks = DbManager.getInstance(getActivity()).getTaskService().getTasksByUserId(Long.valueOf(Settings.getInstance(getActivity()).get(Settings.USER_ID)));
+        Collections.sort(tasks, new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                return ((Long)o1.getMilis()).compareTo((Long)o2.getMilis());
+            }
+        });
         if(tasks != null){
             adapter.swap(tasks);
             adapter.setListener(new MyTaskAdapter.Listener() {
