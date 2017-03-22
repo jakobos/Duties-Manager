@@ -3,6 +3,7 @@ package com.dreamsfactory.dutiesmanager.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +17,9 @@ import com.dreamsfactory.dutiesmanager.R;
 import com.dreamsfactory.dutiesmanager.activities.MyTaskActivity;
 import com.dreamsfactory.dutiesmanager.adapters.HomeAdapter;
 import com.dreamsfactory.dutiesmanager.adapters.MyTaskAdapter;
+import com.dreamsfactory.dutiesmanager.database.DbManager;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
+import com.dreamsfactory.dutiesmanager.settings.Settings;
 import com.dreamsfactory.dutiesmanager.util.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -44,33 +47,46 @@ public class MyTasksFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_tasks, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.myTasksRecyclerView);
-        generateTasksList();
-        adapter = new MyTaskAdapter(tasks);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(adapter);
+        //generateTasksList();
+        //tasks = DbManager.getInstance(getActivity()).getTaskService().getTasksByUserId(Long.valueOf(Settings.getInstance(getActivity()).get(Settings.USER_ID)));
+        tasks = new ArrayList<>();
+        if(tasks != null){
+            adapter = new MyTaskAdapter(tasks);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+            recyclerView.setAdapter(adapter);
+        }
+
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        adapter.setListener(new MyTaskAdapter.Listener() {
-            @Override
-            public void onClick(int position) {
-                Intent intent = new Intent(getActivity(), MyTaskActivity.class);
-                intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
-                startActivity(intent);
-            }
-        });
+        tasks = DbManager.getInstance(getActivity()).getTaskService().getTasksByUserId(Long.valueOf(Settings.getInstance(getActivity()).get(Settings.USER_ID)));
+        if(tasks != null){
+            adapter.swap(tasks);
+            adapter.setListener(new MyTaskAdapter.Listener() {
+                @Override
+                public void onClick(int position) {
+                    Intent intent = new Intent(getActivity(), MyTaskActivity.class);
+                    intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
+                    startActivity(intent);
+                }
+            });
+        }
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.setListener(null);
+        if(tasks != null){
+            adapter.setListener(null);
+        }
+
     }
     private void generateTasksList(){
         if(tasks == null){

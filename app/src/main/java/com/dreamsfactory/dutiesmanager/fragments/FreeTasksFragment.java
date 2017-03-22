@@ -16,6 +16,7 @@ import com.dreamsfactory.dutiesmanager.R;
 import com.dreamsfactory.dutiesmanager.activities.FreeTaskActivity;
 import com.dreamsfactory.dutiesmanager.adapters.FreeTaskAdapter;
 import com.dreamsfactory.dutiesmanager.adapters.HomeAdapter;
+import com.dreamsfactory.dutiesmanager.database.DbManager;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
 import com.dreamsfactory.dutiesmanager.util.DividerItemDecoration;
 
@@ -44,33 +45,45 @@ public class FreeTasksFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_free_tasks, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.freeTasksRecyclerView);
-        generateTasksList();
-        adapter = new FreeTaskAdapter(tasks);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(adapter);
+        //generateTasksList();
+        tasks = new ArrayList<>();
+
+        if(tasks != null){
+            adapter = new FreeTaskAdapter(tasks);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+            recyclerView.setAdapter(adapter);
+        }
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        adapter.setListener(new FreeTaskAdapter.Listener() {
-            @Override
-            public void onClick(int position) {
-                Intent intent = new Intent(getActivity(), FreeTaskActivity.class);
-                intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
-                startActivity(intent);
-            }
-        });
+        tasks = DbManager.getInstance(getActivity()).getTaskService().getTasksByFree();
+        if(tasks != null){
+            adapter.swap(tasks);
+            adapter.setListener(new FreeTaskAdapter.Listener() {
+                @Override
+                public void onClick(int position) {
+                    Intent intent = new Intent(getActivity(), FreeTaskActivity.class);
+                    intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
+                    startActivity(intent);
+                }
+            });
+        }
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.setListener(null);
+        if(tasks != null){
+            adapter.setListener(null);
+        }
+
     }
 
     private void generateTasksList(){

@@ -39,6 +39,7 @@ public class HomeFragment extends Fragment {
     private HomeAdapter adapter;
 
     private List<Task> tasks;
+    private long userId;
 
 
     public HomeFragment() {
@@ -53,15 +54,16 @@ public class HomeFragment extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.homeRecyclerView);
         //generateTasksList();
+        userId = Long.valueOf(Settings.getInstance(getActivity()).get(Settings.USER_ID));
 
-
-        tasks = DbManager.getInstance(getActivity()).getTaskService().getTasksByIsDone(false);
+        tasks = new ArrayList<>();
 //        try{
 //
 //
 //        }catch(NullPointerException e){
 //            LogManager.logError(e.getLocalizedMessage());
 //        }
+
 
         if(tasks != null){
             adapter = new HomeAdapter(tasks);
@@ -80,8 +82,13 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        LogManager.logInfo("onStart()");
+        tasks = DbManager.getInstance(getActivity()).getTaskService().getTasksByIsDone(false);
+        LogManager.logInfo("tasks size = " + tasks.size());
+
 
         if(tasks != null){
+            adapter.swap(tasks);
             adapter.setListener(new HomeAdapter.Listener() {
                 @Override
                 public void onClick(int position) {
@@ -90,18 +97,18 @@ public class HomeFragment extends Fragment {
                         Intent intent = new Intent(getActivity(), FreeTaskActivity.class);
                         intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
                         startActivity(intent);
-                    }else if(tasks.get(position).getOwnerId() > 0 && tasks.get(position).getOwnerId() == 3){
+                    }else if(tasks.get(position).getOwnerId() > 0 && tasks.get(position).getOwnerId() == userId){
                         Intent intent = new Intent(getActivity(), MyTaskActivity.class);
                         intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
                         startActivity(intent);
-                    }else if(tasks.get(position).getOwnerId() != 3){
+                    }else if(tasks.get(position).getOwnerId() != userId){
                         Intent intent = new Intent(getActivity(), FriendTaskActivity.class);
                         intent.putExtra(TaskDetailsFragment.KEY_TASK, tasks.get(position));
                         startActivity(intent);
                     }
 
 
-                    Toast.makeText(getActivity().getApplicationContext(), ""+position, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity().getApplicationContext(), "is done: "+tasks.get(position).getIsDone().toString(), Toast.LENGTH_LONG).show();
                 }
             });
         }
