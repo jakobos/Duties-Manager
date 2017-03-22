@@ -13,15 +13,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.UserLoginActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.FlatLoginActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/title_activity_main"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,8 +21,17 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.FlatLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".activities.NewTaskActivity"
             android:label="@string/title_activity_new_task"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.FriendTaskActivity"
@@ -41,8 +42,14 @@
         <activity
             android:name=".activities.FreeTaskActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.UserRegisterActivity" />
-        <activity android:name=".activities.FlatRegisterActivity"></activity>
+        <activity android:name=".activities.UserRegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.FlatRegisterActivity"
+            android:screenOrientation="portrait"/>
+
+        <service
+            android:name=".services.SyncService"
+            android:exported="false"></service>
     </application>
 
 </manifest>
