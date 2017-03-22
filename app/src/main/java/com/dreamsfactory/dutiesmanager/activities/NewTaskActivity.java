@@ -106,7 +106,10 @@ public class NewTaskActivity extends AppCompatActivity {
             public void onClick(View view) {
                 LogManager.logInfo("onClick() FAB");
 
-                //if(title.getText().toString().isEmpty()||description.getText().toString().isEmpty()||deadline<calendar.getTimeInMillis()){
+                String taskTitle = title.getText().toString().trim();
+                String taskDescription = description.getText().toString().trim();
+
+                if(!taskTitle.isEmpty() && !taskDescription.isEmpty() && deadline > calendar.getTimeInMillis()){
 
                     // JSONObject params = new JSONObject();
                     Map<String, String> params = new HashMap<String, String>();
@@ -115,22 +118,14 @@ public class NewTaskActivity extends AppCompatActivity {
                     params.put("deadline", String.valueOf(deadline));
                     params.put("flat_id", Settings.getInstance(getBaseContext()).get(Settings.FLAT_ID));
 
-                    //testPOST();
                     WebServiceManager.getInstance(getBaseContext()).createTask(params);
 
-                    //for tests only
-
-//                    Map<String, String> params2 = new HashMap<String, String>();
-//                    params.put("flat_id", "10");
-//                    params.put("last_sync_friend", "0");
-//                    params.put("last_sync_task", "0");
-//                    WebServiceManager.getInstance(getBaseContext()).getCount(params2);
 
                     //save task and update server
-                    finish();
+                    //finish();
 
 
-                //}
+                }
 
             }
         });
@@ -138,48 +133,7 @@ public class NewTaskActivity extends AppCompatActivity {
 
     }
 
-    private void testPOST() {
 
-        // Tag used to cancel the request
-        String tag_json_obj = "json_obj_req";
-
-        String url = WebServiceManager.METHOD_CREATE_TASK;
-
-
-        StringRequest req = new StringRequest(Request.Method.POST,
-                url,
-                new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        LogManager.logInfo("RESPONSE: "+response.toString());
-
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("ERROR::", "Registration Error: " + error.getMessage());
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("title", "Androidhive");
-                params.put("description", "abc@androidhive.info");
-                params.put("deadline", "11111");
-                params.put("flat_id", "3");
-
-                return params;
-            }
-
-        };
-
-// Adding request to request queue
-        AppController.getInstance().addToRequestQueue(req, tag_json_obj);
-
-    }
 
     @Override
     protected void onStop() {
