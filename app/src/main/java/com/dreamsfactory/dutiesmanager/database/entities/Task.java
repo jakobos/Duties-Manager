@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.dreamsfactory.dutiesmanager.managers.LogManager;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -126,6 +128,7 @@ public class Task extends DBEntityBase implements Parcelable {
             this.title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_TITLE));
             this.description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_DESCRIPTION));
             this.deadline = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_NAME_DEADLINE));
+            LogManager.logInfo("Task: "+title+" , is done: "+cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_IS_DONE)));
             if(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_IS_DONE)) == 1){
                 this.isDone = true;
             }else{
@@ -208,10 +211,9 @@ public class Task extends DBEntityBase implements Parcelable {
         long currentMs = (Calendar.getInstance().getTime()).getTime();
         long time = deadline - currentMs;
         //in seconds
-        int seconds = (int) time/1000;
-
-        int minutes = (seconds%3600)/60;
-        int hours = seconds / 3600;
+        long seconds = time/1000;
+        long minutes = (seconds/60);
+        int hours = (int)(minutes / 60);
         int days = hours/24;
 
         String text;
