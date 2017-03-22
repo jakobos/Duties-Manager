@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.dreamsfactory.dutiesmanager.R;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +30,12 @@ public class FreeTaskAdapter extends RecyclerView.Adapter<FreeTaskAdapter.MyView
 
     public FreeTaskAdapter(List<Task> tasksList){
         this.tasksList = tasksList;
+    }
+
+    public void swap(List<Task> data){
+        tasksList.clear();
+        tasksList.addAll(data);
+        notifyDataSetChanged();
     }
 
     @Override

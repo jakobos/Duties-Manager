@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.dreamsfactory.dutiesmanager.R;
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +30,12 @@ public class MyTaskAdapter extends RecyclerView.Adapter<MyTaskAdapter.MyViewHold
 
     public MyTaskAdapter(List<Task> tasksList){
         this.tasksList = tasksList;
+    }
+
+    public void swap(List<Task> data){
+        tasksList.clear();
+        tasksList.addAll(data);
+        notifyDataSetChanged();
     }
 
     @Override

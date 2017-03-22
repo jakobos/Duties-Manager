@@ -11,6 +11,7 @@ import com.dreamsfactory.dutiesmanager.database.entities.Task;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +32,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
     public HomeAdapter(List<Task> tasksList){
         this.tasksList = tasksList;
+    }
+
+    public void swap(List<Task> data){
+        tasksList.clear();
+        tasksList.addAll(data);
+        notifyDataSetChanged();
     }
 
     @Override
