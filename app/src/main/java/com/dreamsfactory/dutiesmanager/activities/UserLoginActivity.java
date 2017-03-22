@@ -28,11 +28,13 @@ public class UserLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_login);
 
-        userEmail = (EditText) findViewById(R.id.userEmail);
-        userPassword = (EditText) findViewById(R.id.userPassword);
+        userEmail = (EditText) findViewById(R.id.userLoginEmail);
+        userPassword = (EditText) findViewById(R.id.userLoginPassword);
         btnLogin = (Button) findViewById(R.id.btnUserLogin);
         btnLinkToRegister = (Button) findViewById(R.id.btnUserLinkToRegisterScreen);
 
+
+       // Settings.getInstance(this).set(Settings.USER_IS_LOGGED_IN, false);
         if(Settings.getInstance(this).getBoolean(Settings.USER_IS_LOGGED_IN, false)){
             Intent intent = new Intent(UserLoginActivity.this, FlatLoginActivity.class);
             startActivity(intent);
@@ -88,6 +90,12 @@ public class UserLoginActivity extends AppCompatActivity {
         params.put("password", password);
 
         WebServiceManager.getInstance(this).loginUser(params);
+    }
+
+    public void nextToFlatActivity(){
+        Intent intent = new Intent(UserLoginActivity.this, FlatLoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 

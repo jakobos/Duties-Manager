@@ -76,7 +76,13 @@ public class FlatRegisterActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("address", address);
         params.put("password", password);
+        params.put("owner_id", Settings.getInstance(this).get(Settings.USER_ID));
 
         WebServiceManager.getInstance(this).registerFlat(params);
+    }
+    public void backToLoginActivity(){
+        Intent intent = new Intent(FlatRegisterActivity.this, FlatLoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

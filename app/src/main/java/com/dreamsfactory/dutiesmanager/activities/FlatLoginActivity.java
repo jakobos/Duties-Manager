@@ -14,6 +14,7 @@ import com.dreamsfactory.dutiesmanager.webServices.WebServiceManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class FlatLoginActivity extends AppCompatActivity {
 
@@ -61,7 +62,9 @@ public class FlatLoginActivity extends AppCompatActivity {
         btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(FlatLoginActivity.this, FlatRegisterActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -77,8 +80,15 @@ public class FlatLoginActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("address", address);
         params.put("password", password);
+        params.put("user_id", Settings.getInstance(this).get(Settings.USER_ID));
+
 
         WebServiceManager.getInstance(this).loginFlat(params);
+    }
 
+    public void nextToMainActivity(){
+        Intent intent = new Intent(FlatLoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

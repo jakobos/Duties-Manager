@@ -86,4 +86,9 @@ public class UserRegisterActivity extends AppCompatActivity {
         params.put("password", password);
         WebServiceManager.getInstance(this).registerUser(params);
     }
+    public void backToLoginActivity(){
+        Intent intent = new Intent(UserRegisterActivity.this, UserLoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

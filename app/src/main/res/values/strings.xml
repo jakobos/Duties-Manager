@@ -59,4 +59,5 @@
     <string name="hint_address">Address</string>
     <string name="pref_user_is_logged_in">userIsLoggedin</string>
     <string name="pref_flat_is_logged_in">flatIsLoggedIn</string>
+    <string name="btn_flat_link_to_register">Register flat now.</string>
 </resources>
