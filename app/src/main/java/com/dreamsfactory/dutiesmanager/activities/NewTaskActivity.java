@@ -32,6 +32,7 @@ import com.dreamsfactory.dutiesmanager.webServices.WebServiceManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -76,7 +77,7 @@ public class NewTaskActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         deadline = Calendar.getInstance().getTimeInMillis();
-        deadlineTextView.setText((new Date(deadline).toString()));
+        setDeadlineDate();
 
         mDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -89,12 +90,14 @@ public class NewTaskActivity extends AppCompatActivity {
                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                 deadline = cal.getTimeInMillis();
-                deadlineTextView.setText((new Date(deadline).toString()));
+                setDeadlineDate();
             }
         };
-
-
-
+    }
+    private void setDeadlineDate(){
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        String date = df.format(new Date(deadline));
+        deadlineTextView.setText(date);
     }
 
     @Override
