@@ -66,12 +66,15 @@ public class DbServiceBase {
 
     protected Cursor executeQueryWhere(String tableName, String[] columns, ArrayList<String> whereColumns, String[] whereArgs){
         String whereStatement = "";
+        String column = "";
         for(int i = 0; i < whereColumns.size(); i++){
-            String column = whereColumns.get(i);
+            column = whereColumns.get(i);
             whereStatement += column + " = ? ";
-            if(i+1 < whereColumns.size())
-                column += "AND ";
+            if(i < whereColumns.size()-1) {
+                whereStatement += "AND ";
+            }
         }
+        LogManager.logInfo("Query, where statement: " + whereStatement);
         return dbRead().query(tableName, columns, whereStatement, whereArgs, null, null, null);
     }
     protected Cursor executeQueryWhere(String tableName, String[] columns, String interestColumn, String interestValue){

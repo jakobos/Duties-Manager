@@ -65,7 +65,7 @@ public class MyTasksFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        tasks = DbManager.getInstance(getActivity()).getTaskService().getTasksByUserId(Long.valueOf(Settings.getInstance(getActivity()).get(Settings.USER_ID)));
+        tasks = DbManager.getInstance(getActivity()).getTaskService().getTasksToDoByUserId(Long.valueOf(Settings.getInstance(getActivity()).get(Settings.USER_ID)));
         Collections.sort(tasks, new Comparator<Task>() {
             @Override
             public int compare(Task o1, Task o2) {

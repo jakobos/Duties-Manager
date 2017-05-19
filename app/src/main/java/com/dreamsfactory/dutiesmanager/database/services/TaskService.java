@@ -1,6 +1,7 @@
 package com.dreamsfactory.dutiesmanager.database.services;
 
 import android.database.Cursor;
+import android.provider.SyncStateContract;
 import android.util.Log;
 
 import com.dreamsfactory.dutiesmanager.database.entities.Task;
@@ -57,6 +58,24 @@ public class TaskService extends DbServiceBase {
         }
         return tasks;
     }
+
+    public ArrayList<Task> getTasksToDoByUserId(long userId){
+        ArrayList<String> whereColumns = new ArrayList<>();
+        int isDone = 0;
+        whereColumns.add(Task.COLUMN_NAME_OWNER_ID);
+        whereColumns.add(Task.COLUMN_NAME_IS_DONE);
+        String[] whereArgs = {String.valueOf(userId), String.valueOf(isDone)};
+        Cursor cursor = executeQueryWhere(Task.TABLE_NAME, Task.getFullProjection(), whereColumns, whereArgs);
+        ArrayList<Task> tasks = new ArrayList<>();
+        for(int i = 0; i < cursor.getCount(); i++){
+            cursor.moveToPosition(i);
+            Task task = new Task();
+            if(task.readFromCursor(cursor))
+                tasks.add(task);
+        }
+        return tasks;
+    }
+
     public ArrayList<Task> getTasksByFree(){
         Cursor cursor = executeQueryWhere(Task.TABLE_NAME, Task.getFullProjection(), Task.COLUMN_NAME_OWNER_ID, String.valueOf(0));
         ArrayList<Task> tasks = new ArrayList<>();
