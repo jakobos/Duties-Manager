@@ -62,7 +62,6 @@ public class FreeTaskAdapter extends RecyclerView.Adapter<FreeTaskAdapter.MyView
                 }
             }
         });
-        //holder.name.setText(task.getTitle());
     }
 
     @Override
@@ -71,11 +70,10 @@ public class FreeTaskAdapter extends RecyclerView.Adapter<FreeTaskAdapter.MyView
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        private View view; //and more
+        private View view;
         public MyViewHolder(View itemView) {
             super(itemView);
             view = itemView;
-            //name = (TextView) itemView.findViewById(R.id.homeName);
         }
     }
 }

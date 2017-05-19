@@ -49,12 +49,16 @@ public class UserRegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = userName.getText().toString().trim();
+                String name = userName.getText().toString().trim();
                 String email = userEmail.getText().toString().trim();
                 String password = userPassword.getText().toString().trim();
 
-                if(!username.isEmpty() && !email.isEmpty() && !password.isEmpty()){
-                    registerUser(username, email, password);
+                if(!name.isEmpty() && !email.isEmpty() && !password.isEmpty()){
+                    userName.setText("");
+                    userEmail.setText("");
+                    userPassword.setText("");
+
+                    registerUser(name, email, password);
 
                 }else{
                     Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_LONG).show();
@@ -84,7 +88,7 @@ public class UserRegisterActivity extends AppCompatActivity {
         params.put("name", username);
         params.put("email", email);
         params.put("password", password);
-        WebServiceManager.getInstance(this).registerUser(params);
+        WebServiceManager.getInstance(this).registerUser(this, params);
     }
     public void backToLoginActivity(){
         Intent intent = new Intent(UserRegisterActivity.this, UserLoginActivity.class);

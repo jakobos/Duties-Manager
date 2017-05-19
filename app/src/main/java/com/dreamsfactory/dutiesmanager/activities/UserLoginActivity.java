@@ -54,7 +54,8 @@ public class UserLoginActivity extends AppCompatActivity {
                 String password = userPassword.getText().toString().trim();
 
                 if(!email.isEmpty() && !password.isEmpty()){
-
+                    userEmail.setText("");
+                    userPassword.setText("");
                     checkLogin(email, password);
 
                 }else{
@@ -89,7 +90,7 @@ public class UserLoginActivity extends AppCompatActivity {
         params.put("email", email);
         params.put("password", password);
 
-        WebServiceManager.getInstance(this).loginUser(params);
+        WebServiceManager.getInstance(this).loginUser(this, params);
     }
 
     public void nextToFlatActivity(){

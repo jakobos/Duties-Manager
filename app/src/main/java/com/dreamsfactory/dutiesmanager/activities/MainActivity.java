@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
         // Remote MySQL DB
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 5*1000,
-                30*1000, pendingIntent);
+                2*1000, pendingIntent);
     }
 
     private void logout(){
@@ -327,9 +327,9 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
 
         // show menu only when home fragment is selected
-        if (navItemIndex == 0) {
-            getMenuInflater().inflate(R.menu.main, menu);
-        }
+//        if (navItemIndex == 0) {
+//            getMenuInflater().inflate(R.menu.main, menu);
+//        }
 
 
         return true;

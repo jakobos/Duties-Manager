@@ -29,7 +29,6 @@ public class FriendTaskActivity extends AppCompatActivity {
         checkBoxIsDone = (CheckBox) findViewById(R.id.checkIsDone);
 
         task = getIntent().getExtras().getParcelable(TaskDetailsFragment.KEY_TASK);
-        //task = new Task();
 
         TaskDetailsFragment fragment = (TaskDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentFriendTaskDetails);
         fragment.setTask(task);
@@ -55,6 +54,6 @@ public class FriendTaskActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        task = (Task) savedInstanceState.getParcelable(KEY_TASK);
+        task = savedInstanceState.getParcelable(KEY_TASK);
     }
 }

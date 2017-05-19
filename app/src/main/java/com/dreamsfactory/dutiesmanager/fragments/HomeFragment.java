@@ -55,16 +55,9 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.homeRecyclerView);
-        //generateTasksList();
         userId = Long.valueOf(Settings.getInstance(getActivity()).get(Settings.USER_ID));
 
         tasks = new ArrayList<>();
-//        try{
-//
-//
-//        }catch(NullPointerException e){
-//            LogManager.logError(e.getLocalizedMessage());
-//        }
 
 
         if(tasks != null){
@@ -117,8 +110,6 @@ public class HomeFragment extends Fragment {
                         startActivity(intent);
                     }
 
-
-                    //Toast.makeText(getActivity().getApplicationContext(), "is done: "+tasks.get(position).getIsDone().toString(), Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -133,22 +124,4 @@ public class HomeFragment extends Fragment {
         }
 
     }
-
-    private void generateTasksList(){
-        if(tasks == null){
-            tasks = new ArrayList<>();
-        }
-        tasks.add(new Task("Zadanie nr 1", getDeadline(3), 0));
-        tasks.add(new Task("Zadanie nr 2", getDeadline(2), 5));
-        tasks.add(new Task("Zadanie nr 3", getDeadline(10), 3));
-        tasks.add(new Task("Zadanie nr 4", getDeadline(4), 4));
-        tasks.add(new Task("Zadanie nr 5", getDeadline(7), 3));
-        tasks.add(new Task("Zadanie nr 6", getDeadline(1),112));
-
-    }
-    private long getDeadline(int days){
-        Calendar calendar = Calendar.getInstance();
-        return calendar.getTime().getTime() + days*24*60*60*1000;
-    }
-
 }

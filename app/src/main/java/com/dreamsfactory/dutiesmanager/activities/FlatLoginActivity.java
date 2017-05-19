@@ -52,6 +52,8 @@ public class FlatLoginActivity extends AppCompatActivity {
 
                 if(!address.isEmpty() && !password.isEmpty()){
 
+                    flatAddress.setText("");
+                    flatPassword.setText("");
                     checkFlat(address, password);
 
                 }else{
@@ -83,7 +85,7 @@ public class FlatLoginActivity extends AppCompatActivity {
         params.put("user_id", Settings.getInstance(this).get(Settings.USER_ID));
 
 
-        WebServiceManager.getInstance(this).loginFlat(params);
+        WebServiceManager.getInstance(this).loginFlat(this, params);
     }
 
     public void nextToMainActivity(){

@@ -30,7 +30,6 @@ public class FreeTaskActivity extends AppCompatActivity {
         checkBoxDoIt = (CheckBox) findViewById(R.id.checkDoIt);
 
         task = getIntent().getExtras().getParcelable(TaskDetailsFragment.KEY_TASK);
-        //task = new Task();
 
         TaskDetailsFragment fragment = (TaskDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentFreeTaskDetails);
         fragment.setTask(task);
@@ -58,6 +57,6 @@ public class FreeTaskActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        task = (Task) savedInstanceState.getParcelable(KEY_TASK);
+        task = savedInstanceState.getParcelable(KEY_TASK);
     }
 }

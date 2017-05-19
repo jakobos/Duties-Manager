@@ -47,7 +47,6 @@ public class FreeTasksFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_free_tasks, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.freeTasksRecyclerView);
-        //generateTasksList();
         tasks = new ArrayList<>();
 
         if(tasks != null){
@@ -94,20 +93,4 @@ public class FreeTasksFragment extends Fragment {
 
     }
 
-    private void generateTasksList(){
-        if(tasks == null){
-            tasks = new ArrayList<>();
-        }
-        tasks.add(new Task("Zadanie nr 1", getDeadline(3), 0));
-        tasks.add(new Task("Zadanie nr 2", getDeadline(2), 0));
-        tasks.add(new Task("Zadanie nr 3", getDeadline(10), 0));
-        tasks.add(new Task("Zadanie nr 4", getDeadline(4), 0));
-        tasks.add(new Task("Zadanie nr 5", getDeadline(7), 0));
-        tasks.add(new Task("Zadanie nr 6", getDeadline(1), 0));
-
-    }
-    private long getDeadline(int days){
-        Calendar calendar = Calendar.getInstance();
-        return calendar.getTime().getTime() + days*24*60*60*1000;
-    }
 }

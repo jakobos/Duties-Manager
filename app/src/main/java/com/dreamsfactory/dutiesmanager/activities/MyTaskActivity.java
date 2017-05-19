@@ -19,7 +19,6 @@ public class MyTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_task);
 
         task = getIntent().getExtras().getParcelable(TaskDetailsFragment.KEY_TASK);
-        //task = new Task();
 
         TaskDetailsFragment fragment = (TaskDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentMyTaskDetails);
         fragment.setTask(task);

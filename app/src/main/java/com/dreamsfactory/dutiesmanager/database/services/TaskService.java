@@ -48,9 +48,6 @@ public class TaskService extends DbServiceBase {
     public ArrayList<Task> getTasksByUserId(long userId){
         Cursor cursor = executeQueryWhere(Task.TABLE_NAME, Task.getFullProjection(), Task.COLUMN_NAME_OWNER_ID, String.valueOf(userId));
 
-//        if(cursor.getCount() == 0)
-//            return null;
-
         ArrayList<Task> tasks = new ArrayList<>();
         for(int i = 0; i < cursor.getCount(); i++){
             cursor.moveToPosition(i);
@@ -62,9 +59,6 @@ public class TaskService extends DbServiceBase {
     }
     public ArrayList<Task> getTasksByFree(){
         Cursor cursor = executeQueryWhere(Task.TABLE_NAME, Task.getFullProjection(), Task.COLUMN_NAME_OWNER_ID, String.valueOf(0));
-//        if(cursor.getCount() == 0)
-//            return null;
-
         ArrayList<Task> tasks = new ArrayList<>();
         for(int i = 0; i < cursor.getCount(); i++){
             cursor.moveToPosition(i);
@@ -81,8 +75,6 @@ public class TaskService extends DbServiceBase {
         else
             value = 0;
         Cursor cursor = executeQueryWhere(Task.TABLE_NAME, Task.getFullProjection(), Task.COLUMN_NAME_IS_DONE, String.valueOf(value));
-//        if(cursor.getCount() == 0)
-//            return null;
 
         ArrayList<Task> tasks = new ArrayList<>();
         for(int i = 0; i < cursor.getCount(); i++){

@@ -49,8 +49,6 @@ public class MyTasksFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_tasks, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.myTasksRecyclerView);
-        //generateTasksList();
-        //tasks = DbManager.getInstance(getActivity()).getTaskService().getTasksByUserId(Long.valueOf(Settings.getInstance(getActivity()).get(Settings.USER_ID)));
         tasks = new ArrayList<>();
         if(tasks != null){
             adapter = new MyTaskAdapter(tasks);
@@ -95,21 +93,5 @@ public class MyTasksFragment extends Fragment {
             adapter.setListener(null);
         }
 
-    }
-    private void generateTasksList(){
-        if(tasks == null){
-            tasks = new ArrayList<>();
-        }
-        tasks.add(new Task("Zadanie nr 1", getDeadline(3), 3));
-        tasks.add(new Task("Zadanie nr 2", getDeadline(2), 3));
-        tasks.add(new Task("Zadanie nr 3", getDeadline(10), 3));
-        tasks.add(new Task("Zadanie nr 4", getDeadline(4), 3));
-        tasks.add(new Task("Zadanie nr 5", getDeadline(7), 3));
-        tasks.add(new Task("Zadanie nr 6", getDeadline(1), 3));
-
-    }
-    private long getDeadline(int days){
-        Calendar calendar = Calendar.getInstance();
-        return calendar.getTime().getTime() + days*24*60*60*1000;
     }
 }

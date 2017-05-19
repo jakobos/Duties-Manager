@@ -49,7 +49,8 @@ public class FlatRegisterActivity extends AppCompatActivity {
                 String address = flatAddress.getText().toString().trim();
                 String password = flatPassword.getText().toString().trim();
                 if(!address.isEmpty() && !password.isEmpty()){
-
+                    flatAddress.setText("");
+                    flatPassword.setText("");
                     registerFlat(address, password);
 
                 }else{
@@ -60,7 +61,9 @@ public class FlatRegisterActivity extends AppCompatActivity {
         btnLinkToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(FlatRegisterActivity.this, FlatLoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -78,7 +81,7 @@ public class FlatRegisterActivity extends AppCompatActivity {
         params.put("password", password);
         params.put("owner_id", Settings.getInstance(this).get(Settings.USER_ID));
 
-        WebServiceManager.getInstance(this).registerFlat(params);
+        WebServiceManager.getInstance(this).registerFlat(this, params);
     }
     public void backToLoginActivity(){
         Intent intent = new Intent(FlatRegisterActivity.this, FlatLoginActivity.class);
