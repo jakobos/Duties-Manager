@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class WebServiceManager {
 
-    private final static String SERVER_URI = "http://192.168.8.100/duties_manager_api";
+    private final static String SERVER_URI = "http://192.168.8.101/duties_manager_api";
 
     private final static String METHOD_GET_COUNTS = "get_counts.php";
 
@@ -91,8 +91,6 @@ public class WebServiceManager {
 
 
 
-
-
     private static WebServiceManager _instance;
 
 
@@ -106,7 +104,6 @@ public class WebServiceManager {
 
 
     private WebServiceManager(Context context){
-        mRef = new WeakReference<>(context);
         this.mContext = context.getApplicationContext();
     }
     public static synchronized WebServiceManager getInstance(Context context){
@@ -117,19 +114,14 @@ public class WebServiceManager {
         }
         return _instance;
     }
-//    private void init(){
-//        if(!isInitialized){
-//
-//        }
-//    }
 
     private String makeURI(String method){
         return SERVER_URI + "/" + method;
     }
 
 
-    public void loginUser(Map<String,String> params){
-
+    public void loginUser(Context context, Map<String,String> params){
+        mRef = new WeakReference<>(context);
         Log.d(TAG, "loginUser()");
         VolleyService volleyService = new VolleyService();
         volleyService.setListener(new VolleyService.Listener() {
@@ -200,8 +192,8 @@ public class WebServiceManager {
     }
 
 
-    public void registerUser(Map<String, String> params){
-
+    public void registerUser(Context context, Map<String, String> params){
+        mRef = new WeakReference<>(context);
         Log.d(TAG, "registerUser()");
         VolleyService volleyService = new VolleyService();
         volleyService.setListener(new VolleyService.Listener() {
@@ -268,7 +260,8 @@ public class WebServiceManager {
 
     }
 
-    public void registerFlat(Map<String, String> params){
+    public void registerFlat(Context context, Map<String, String> params){
+        mRef = new WeakReference<>(context);
         Log.d(TAG, "registerFlat()");
         VolleyService volleyService = new VolleyService();
         volleyService.setListener(new VolleyService.Listener() {
@@ -331,8 +324,8 @@ public class WebServiceManager {
         volleyService.makePOSTStringRequest("tag_register_user", makeURI(METHOD_REGISTER_FLAT), params);
     }
 
-    public void loginFlat(Map<String, String> params){
-
+    public void loginFlat(Context context, Map<String, String> params){
+        mRef = new WeakReference<>(context);
         Log.d(TAG, "loginFlat()");
         VolleyService volleyService = new VolleyService();
         volleyService.setListener(new VolleyService.Listener() {
@@ -410,6 +403,8 @@ public class WebServiceManager {
         params.put("flat_id", flatId);
         params.put("last_sync_task", lastSyncTask);
         params.put("last_sync_friend", lastSyncFriend);
+        LogManager.logInfo("Last sync task: "+ lastSyncTask);
+        LogManager.logInfo("Last sync friend: "+ lastSyncFriend);
 
         VolleyService volleyService = new VolleyService();
         volleyService.setListener(new VolleyService.Listener() {
@@ -491,19 +486,13 @@ public class WebServiceManager {
             public void onResponse(String response) {
                 try{
                     JSONObject JSONresponse = new JSONObject(response);
-                    //boolean error = JSONresponse.getBoolean(RESPONSE_ERROR);
                     boolean error = JSONresponse.getBoolean(RESPONSE_ERROR);
 
                     if(!error){
                         Settings.getInstance(mContext).set(Settings.LAST_SYNC_TASK, Calendar.getInstance().getTimeInMillis());
                         JSONArray objects;
-                        // images found
-                        // Getting Array of images
                         objects = JSONresponse.getJSONArray(RESPONSE_TASKS);
 
-                        //ArrayList<Task> tasksList = new ArrayList<>();
-
-                        // looping through All Products
                         for (int i = 0; i < objects.length(); i++) {
                             JSONObject taskObj = objects.getJSONObject(i);
 
@@ -563,19 +552,13 @@ public class WebServiceManager {
             public void onResponse(String response) {
                 try{
                     JSONObject JSONresponse = new JSONObject(response);
-                    //boolean error = JSONresponse.getBoolean(RESPONSE_ERROR);
                     boolean error = JSONresponse.getBoolean(RESPONSE_ERROR);
 
                     if(!error){
                         Settings.getInstance(mContext).set(Settings.LAST_SYNC_FRIEND, Calendar.getInstance().getTimeInMillis());
                         JSONArray objects;
-                        // images found
-                        // Getting Array of images
                         objects = JSONresponse.getJSONArray(RESPONSE_FRIENDS);
 
-                        //ArrayList<Task> tasksList = new ArrayList<>();
-
-                        // looping through All Products
                         for (int i = 0; i < objects.length(); i++) {
                             JSONObject friendObj = objects.getJSONObject(i);
 
@@ -592,7 +575,6 @@ public class WebServiceManager {
                             if(!DbManager.getInstance(mContext).getFriendService().updateFriend(friend))
                                 DbManager.getInstance(mContext).getFriendService().insertFriend(friend);
 
-                            //tasksList.add(task);
                         }
 
 
@@ -615,17 +597,14 @@ public class WebServiceManager {
 
     }
 
-    public void createTask(Map<String,String> params){
+    public void createTask(final Context context, Map<String,String> params){
+        mRef = new WeakReference<>(context);
         Log.d(TAG, "createTask()");
         VolleyService volleyService = new VolleyService();
         volleyService.setListener(new VolleyService.Listener() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, "Login Response: " + response.toString());
-                //hideDialog();
-
-
-
             }
 
             @Override
@@ -671,6 +650,7 @@ public class WebServiceManager {
 
                         String errorMsg = JSONresponse.getString(RESPONSE_ERROR_MSG);
                         LogManager.logError(errorMsg);
+                        showMessage(context, "Dodawanie zadania nie powiodło się. Spróbuj ponownie.");
 
                     }
 
@@ -679,8 +659,10 @@ public class WebServiceManager {
                 }
             }
         });
-        //volleyService.makePOSTJSONObjectRequest("tag_create_task", METHOD_CREATE_TASK, params);
         volleyService.makePOSTStringRequest("tag_create_task", makeURI(METHOD_CREATE_TASK), params);
+    }
+    private void showMessage(Context context, String message){
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
     public void updateTask(Map<String, String> params){
@@ -751,7 +733,6 @@ public class WebServiceManager {
                 }
             }
         });
-        //volleyService.makePOSTJSONObjectRequest("tag_create_task", METHOD_CREATE_TASK, params);
         volleyService.makePOSTStringRequest("tag_update_task", makeURI(METHOD_UPDATE_TASK), params);
 
 

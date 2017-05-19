@@ -15,18 +15,21 @@ public class Flat extends DBEntityBase {
     //
     public static final String TABLE_NAME = "Flat";
     public static final String COLUMN_NAME_ADDRESS = "Address";
-//    public static final String COLUMN_NAME_FLAT_ID = "FlatId";
 
     //
     //Variables
     //
 
     private String address;
-//    private String flatId;
 
     //
     //constructors
     //
+    public Flat(){
+        setRemoteId(0);
+        setUUID("");
+        this.address = "";
+    }
 
     //
     //Static methods
@@ -67,7 +70,6 @@ public class Flat extends DBEntityBase {
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
             setRemoteId(cursor.getLong(cursor.getColumnIndexOrThrow(REMOTE_ID)));
             this.address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_ADDRESS));
-            //this.flatId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_FLAT_ID));
             setUUID(cursor.getString(cursor.getColumnIndexOrThrow(UNIQUE_ID)));
 
             return true;
@@ -92,11 +94,5 @@ public class Flat extends DBEntityBase {
     public void setAddress(String address){
         this.address = address;
     }
-//    public String getFlatId(){
-//        return flatId;
-//    }
-//    public void setFlatId(String flatId){
-//        this.flatId = flatId;
-//    }
 
 }

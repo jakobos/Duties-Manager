@@ -17,7 +17,6 @@ public class User extends DBEntityBase {
     public static final String TABLE_NAME = "User";
     public static final String COLUMN_NAME_USERNAME = "Username";
     public static final String COLUMN_NAME_EMAIL = "Email";
-//    public static final String COLUMN_NAME_USER_ID = "UserId";
 
     //
     //Variables
@@ -25,13 +24,11 @@ public class User extends DBEntityBase {
 
     private String name;
     private String email;
-//    private String userId;
 
     //
     //constructors
     //
     public User(){
-        //this.userId = "";
         setUUID("");
         this.name = "";
         this.email = "";
@@ -81,7 +78,6 @@ public class User extends DBEntityBase {
             setRemoteId(cursor.getLong(cursor.getColumnIndexOrThrow(REMOTE_ID)));
             this.name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_USERNAME));
             this.email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_EMAIL));
-            //this.userId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_USER_ID));
             setUUID(cursor.getString(cursor.getColumnIndexOrThrow(UNIQUE_ID)));
 
             return true;
@@ -112,10 +108,4 @@ public class User extends DBEntityBase {
     public void setEmail(String email){
         this.email = email;
     }
-//    public String getUserId(){
-//        return userId;
-//    }
-//    public void setUserId(String userId){
-//        this.userId = userId;
-//    }
 }

@@ -20,7 +20,6 @@ public class Task extends DBEntityBase implements Parcelable {
     //Constant variables
     //
     public static final String TABLE_NAME = "Task";
-    //public static final String COLUMN_NAME_TASK_ID = "TaskId";
     public static final String COLUMN_NAME_TITLE = "Title";
     public static final String COLUMN_NAME_DESCRIPTION = "Description";
     public static final String COLUMN_NAME_DEADLINE = "Deadline";
@@ -48,7 +47,6 @@ public class Task extends DBEntityBase implements Parcelable {
         this.ownerId = 0;
         setUUID("");
         setRemoteId(0);
-//        this.taskId = "";
     }
 
     public Task(String title){
@@ -59,7 +57,6 @@ public class Task extends DBEntityBase implements Parcelable {
         this.ownerId = 0;
         setUUID("");
         setRemoteId(0);
-//        this.taskId = "";
     }
     public Task(String title, long deadline, long ownerId){
         this.title = title;
@@ -69,7 +66,6 @@ public class Task extends DBEntityBase implements Parcelable {
         this.ownerId = ownerId;
         setUUID("");
         setRemoteId(0);
- //       this.taskId = "";
     }
 
     //
@@ -122,7 +118,6 @@ public class Task extends DBEntityBase implements Parcelable {
     public boolean readFromCursor(Cursor cursor) {
         try{
             this.id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
-            //this.taskId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_TASK_ID));
             setRemoteId(cursor.getLong(cursor.getColumnIndexOrThrow(REMOTE_ID)));
             setUUID(cursor.getString(cursor.getColumnIndexOrThrow(UNIQUE_ID)));
             this.title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_TITLE));
@@ -152,12 +147,6 @@ public class Task extends DBEntityBase implements Parcelable {
     //base class methods
     //
 
-//    public String getTaskId(){
-//        return taskId;
-//    }
-//    public void setTaskId(String taskId){
-//        this.taskId = taskId;
-//    }
     public String getTitle(){
         return title;
     }
@@ -271,7 +260,7 @@ public class Task extends DBEntityBase implements Parcelable {
         deadline = in.readLong();
         isDone = in.readByte() != 0;
         ownerId = in.readLong();
-        setUUID(in.readString());// = in.readString();
+        setUUID(in.readString());
         setRemoteId(in.readLong());
     }
 
