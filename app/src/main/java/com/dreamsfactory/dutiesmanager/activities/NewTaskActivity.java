@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -48,6 +49,8 @@ public class NewTaskActivity extends AppCompatActivity {
     private Button deadlineBtn;
     private FloatingActionButton fab;
 
+    private TextView deadlineTextView;
+
     private long deadline;
 
 
@@ -68,9 +71,12 @@ public class NewTaskActivity extends AppCompatActivity {
         title = (EditText) findViewById(R.id.newTaskTitleEditText);
         description = (EditText) findViewById(R.id.newTaskDescriptionEditText);
         deadlineBtn = (Button) findViewById(R.id.setDeadlineButton);
+        deadlineTextView = (TextView) findViewById(R.id.newTaskDeadlineTextView);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
+        deadline = Calendar.getInstance().getTimeInMillis();
+        deadlineTextView.setText((new Date(deadline).toString()));
 
         mDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -83,6 +89,7 @@ public class NewTaskActivity extends AppCompatActivity {
                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
                 deadline = cal.getTimeInMillis();
+                deadlineTextView.setText((new Date(deadline).toString()));
             }
         };
 
@@ -111,18 +118,16 @@ public class NewTaskActivity extends AppCompatActivity {
 
                 if(!taskTitle.isEmpty() && !taskDescription.isEmpty() && deadline > calendar.getTimeInMillis()){
 
-                    // JSONObject params = new JSONObject();
+                    title.setText("");
+                    description.setText("");
+
+
                     Map<String, String> params = new HashMap<String, String>();
-                    params.put("title", title.getText().toString());
-                    params.put("description", description.getText().toString());
+                    params.put("title", taskTitle);
+                    params.put("description", taskDescription);
                     params.put("deadline", String.valueOf(deadline));
                     params.put("flat_id", Settings.getInstance(getBaseContext()).get(Settings.FLAT_ID));
-
-                    WebServiceManager.getInstance(getBaseContext()).createTask(params);
-
-
-                    //save task and update server
-                    //finish();
+                    createTask(params);
 
 
                 }
@@ -131,6 +136,9 @@ public class NewTaskActivity extends AppCompatActivity {
         });
 
 
+    }
+    private void createTask(Map<String, String> params){
+        WebServiceManager.getInstance(this).createTask(this, params);
     }
 
 
