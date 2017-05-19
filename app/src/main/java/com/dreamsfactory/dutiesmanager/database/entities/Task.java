@@ -34,9 +34,8 @@ public class Task extends DBEntityBase implements Parcelable {
     private String title;
     private String description;
     private long deadline;
-    private boolean isDone;
+    private Boolean isDone;
     private long ownerId;
-   // private String taskId;
 
     //
     //constructors
@@ -113,7 +112,8 @@ public class Task extends DBEntityBase implements Parcelable {
         values.put(COLUMN_NAME_TITLE, title);
         values.put(COLUMN_NAME_DESCRIPTION, description);
         values.put(COLUMN_NAME_DEADLINE, deadline);
-        values.put(COLUMN_NAME_IS_DONE, isDone);
+        int flag = isDone ? 1 : 0;
+        values.put(COLUMN_NAME_IS_DONE, flag);
         values.put(COLUMN_NAME_OWNER_ID, ownerId);
         return values;
     }

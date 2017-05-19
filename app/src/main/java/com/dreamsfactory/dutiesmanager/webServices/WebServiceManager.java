@@ -520,12 +520,11 @@ public class WebServiceManager {
                             task.setTitle(title);
                             task.setDescription(description);
                             task.setDeadline(Long.valueOf(deadline));
-                            task.setIsDone(Boolean.valueOf(isDone));
+                            task.setIsDone(Integer.valueOf(isDone).equals(1));
 
                             if(!DbManager.getInstance(mContext).getTaskService().updateTask(task))
                                 DbManager.getInstance(mContext).getTaskService().insertTask(task);
 
-                            //tasksList.add(task);
                         }
 
 
