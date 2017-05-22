@@ -28,7 +28,7 @@
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="remain_time">Pozostało</string>
     <string name="task_owner">Odpowiedzialny:</string>
     <string name="task_description">Opis zadania:</string>
@@ -47,17 +47,22 @@
 
 
     <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
-    <string name="hint_name">Fullname</string>
-    <string name="btn_login">LOGIN</string>
-    <string name="btn_register">REGISTER</string>
-    <string name="btn_link_to_register">Not a member? Sign up now.</string>
-    <string name="btn_link_to_login">Already registred! Login Me.</string>
-    <string name="welcome">Welcome</string>
-    <string name="btn_logout">LOGOUT</string>
-    <string name="name">Fullname</string>
-    <string name="hint_address">Address</string>
+    <string name="hint_password">Hasło</string>
+    <string name="hint_name">Imię i nazwisko</string>
+    <string name="btn_login">Zaloguj się</string>
+    <string name="btn_register">Zarejestruj się</string>
+    <string name="btn_link_to_register">Nie masz konta? Zarejestruj się teraz.</string>
+    <string name="btn_link_to_login">Jesteś już zarejestrowany! Zaloguj się.</string>
+    <string name="welcome">Witaj</string>
+    <string name="btn_logout">Wyloguj się</string>
+    <string name="name">Imię i nazwisko</string>
+    <string name="hint_address">Adres</string>
     <string name="pref_user_is_logged_in">userIsLoggedin</string>
     <string name="pref_flat_is_logged_in">flatIsLoggedIn</string>
-    <string name="btn_flat_link_to_register">Register flat now.</string>
+    <string name="btn_flat_link_to_register">Zarejestruj mieszkanie.</string>
+    <string name="empty_list">Brak zadań do wyświetlenia</string>
+    <string name="enter_flat_details">Please enter flat details!</string>
+    <string name="enter_credentials">Proszę wypełnić wszystkie pola</string>
+    <string name="task_no_owner">Nie przypisano</string>
+    <string name="unknown_owner">Nieznany właściciel</string>
 </resources>
