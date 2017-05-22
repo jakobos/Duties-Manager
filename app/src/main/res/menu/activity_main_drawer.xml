@@ -8,11 +8,11 @@
             android:title="@string/nav_home"/>
         <item
             android:id="@+id/nav_my_tasks"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_event_note_black_24dp"
             android:title="@string/nav_my_tasks"/>
         <item
             android:id="@+id/nav_free_tasks"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_event_available_black_24dp"
             android:title="@string/nav_free_tasks" />
     </group>
     <item android:title="Other">
