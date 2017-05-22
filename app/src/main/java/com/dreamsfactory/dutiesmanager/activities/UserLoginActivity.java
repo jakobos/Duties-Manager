@@ -60,7 +60,7 @@ public class UserLoginActivity extends AppCompatActivity {
 
                 }else{
 
-                    Toast.makeText(getApplicationContext(), "Please enter the credentials.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.enter_credentials, Toast.LENGTH_LONG).show();
 
                 }
 

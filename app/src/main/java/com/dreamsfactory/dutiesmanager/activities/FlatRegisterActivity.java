@@ -54,7 +54,7 @@ public class FlatRegisterActivity extends AppCompatActivity {
                     registerFlat(address, password);
 
                 }else{
-                    Toast.makeText(getApplicationContext(), "Please enter flat details!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.enter_flat_details, Toast.LENGTH_LONG).show();
                 }
             }
         });

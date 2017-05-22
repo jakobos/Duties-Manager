@@ -61,7 +61,7 @@ public class UserRegisterActivity extends AppCompatActivity {
                     registerUser(name, email, password);
 
                 }else{
-                    Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.enter_credentials, Toast.LENGTH_LONG).show();
                 }
             }
         });
